@@ -1,4 +1,5 @@
 import os
+import copy
 #Following code pulled from Stackoverflow to rank unsorted lists
 #http://stackoverflow.com/questions/3071415/efficient-method-to-calculate-the-rank-vector-of-a-list-in-python
 def rank_simple(vector):
@@ -22,6 +23,17 @@ def rankdata(a):
             dupcount = 0
     return newarray
 
+def Rank(data):
+	sortData = copy.deepcopy(data)
+	sortData.sort()
+	rankData = {}
+	for i in range(len(sortData)):
+		rankData[sortData[i]] = i+1
+	ranking = []
+	for i in range(len(data)):
+		ranking.append(rankData[data[i]])
+	return ranking
+
 def Spearman(srcFlowTxt,destFlowTxt):
 	srcFlow = open(srcFlowTxt)
 	destFlow = open(destFlowTxt)
@@ -30,23 +42,25 @@ def Spearman(srcFlowTxt,destFlowTxt):
 #Dependent Variable
 	for data in srcFlow:
 		data = data.strip('\n')
-		srcFlowData.append(data)
+		srcFlowData.append(int(data))
 	print("srcData",srcFlowData)
 #Independent Variable
 	for data in destFlow:
 		data = data.strip('\n')
-		destFlowData.append(data)
+		destFlowData.append(int(data))
 	print("destData",destFlowData)
 #Rank Dependent Variable
-	srcRank = rankdata(srcFlowData)
+	#srcRank = rankdata(srcFlowData)
+	srcRank = Rank(srcFlowData)
 	print("srcRank",srcRank)
 #Rank Independent Variable
-	destRank = rankdata(destFlowData)
+	#destRank = rankdata(destFlowData)
+	destRank = Rank(destFlowData)
 	print("destRank",destRank)
 #Difference in Rank
 	difference = []
 	for i in range(len(srcRank)):
-		difference.append(abs(srcRank[i] - destRank[i]))
+		difference.append(srcRank[i] - destRank[i])
 	print("Rank diff",difference)
 #Square Difference
 	for i in range(len(difference)):
