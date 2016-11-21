@@ -7,13 +7,22 @@ CLICK_SCRIPTS_DIR=../click_scripts/
 DISTRO_MIRROR_LIST=./distro.list
 NETWORK_DEVICE=enp0s8
 NUMBER_HOSTS=4
-TEST_DURATION=130
+TEST_DURATION=5
 
 VIRTUAL_SUBNET_PREFIX=19.19.19
 VIRTUAL_MASK=255.255.255.0
 CLICK_ADDRESS=254
 
+RESULTS_DIR=../results/
 
+PUSH_GIT=true
+
+
+test_dir=$RESULTS_DIR$(date +%Y%m%d)
+mkdir -p "$test_dir"
+cd $test_dir
+touch "testResults"
+#$HOME/test.out
 
 # Make virtual devices
 printf "Setting network devices... \n\n"
@@ -49,7 +58,7 @@ while read line; do
 done <$DISTRO_MIRROR_LIST
 
 # wait 5 minutes
-printf "Waiting 5 minutes... \n\nTime Remaining:\n"
+printf "Waiting for test to finish... \n\nTime Remaining:\n"
 
 timer=$TEST_DURATION
 
@@ -60,7 +69,7 @@ while [ $timer -ge "0" ] ; do
 done
 
 # kill all wget processes
-printf "Stopping all wget transfers... \n\n"
+printf "\nStopping all wget transfers... \n\n"
 
 echo pkill -9 wget
 
@@ -68,3 +77,17 @@ echo pkill -9 wget
 
 
 # shut down all virtual devices
+
+counter=0
+while [ $counter -le $NUMBER_HOSTS ]; do
+	echo ifconfig $NETWORK_DEVICE:$counter down
+	((counter++))
+done
+
+# push results to GitHub
+
+if [ "$PUSH_GIT" = true ] ; then
+	git add *
+	git commit -m "Push most recent test results"
+	git push
+fi
