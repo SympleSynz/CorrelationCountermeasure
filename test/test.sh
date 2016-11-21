@@ -1,44 +1,50 @@
 #!/bin/bash       
 # test script for creating virtual network devices
-# should be run ./test.sh <ethernet Device> <number of virtual adapters>
 
-CLICK_PROG=../click-2.0.1/click
-CLICK_SCRIPTS_DIR=../click_scripts/
-DISTRO_MIRROR_LIST=./distro.list
-NETWORK_DEVICE=enp0s8
-NUMBER_HOSTS=4
+# Test Settings
+NETWORK_DEVICE=wlan0
+NUMBER_HOSTS=2
 TEST_DURATION=5
 
-VIRTUAL_SUBNET_PREFIX=19.19.19
-VIRTUAL_MASK=255.255.255.0
+GATEWAY=10.0.0.1
+
+# Address
+VIRTUAL_SUBNET_PREFIX=19.19.19.
+VIRTUAL_MASK=24
 CLICK_ADDRESS=254
 
+# Path
+CLICK_PROG=../click-2.0.1/click
+CLICK_SCRIPTS_DIR=../click_scripts/
+DISTRO_MIRROR_LIST=$(pwd)/distro.list
 RESULTS_DIR=../results/
 
+# Options
 GIT=false
 
 
-test_dir=$RESULTS_DIR$(date +%Y%m%d)
-mkdir -p "$test_dir"
-cd $test_dir
-touch "testResults"
-#$HOME/test.out
+# Make output directory and cd to output
+
+#output_dir=$RESULTS_DIR$(date +%Y%m%d%H%M%S)
+#mkdir -p "$output_dir"
+#cd $output_dir
 
 # Make virtual devices
 printf "Setting network devices... \n\n"
 
-echo ifconfig $NETWORK_DEVICE:0 $VIRTUAL_SUBNET.$CLICK_ADDRESS
+ifconfig $NETWORK_DEVICE:0 $VIRTUAL_SUBNET_PREFIX$CLICK_ADDRESS
 
 counter=1
 while [ $counter -le $NUMBER_HOSTS ]; do
-	echo ifconfig $NETWORK_DEVICE:$((counter+20)) $VIRTUAL_SUBNET_PREFIX.$counter
+	ifconfig $NETWORK_DEVICE:$counter $VIRTUAL_SUBNET_PREFIX$counter
 	((counter++))
 done
 
 # Set route from all virtual network adapters to click adapter
 printf "Setting routes... \n\n"
 
-
+#echo ip route add "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$VIRTUAL_SUBNET_PREFIX"$CLICK_ADDRESS
+ip route add "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$GATEWAY"
 
 # run click
 printf "starting click middlebox... \n\n"
@@ -53,7 +59,11 @@ while read line; do
 	if [ $counter -gt $NUMBER_HOSTS ]; then
 		break
 	fi
-	echo wget --bind-address=6.6.6.$counter $(echo $line | tr -d "\n\r") "&"
+	#echo wget --bind-address=6.6.6.$counter $(echo $line | tr -d "\n\r") "&"
+	#--bind-address=$VIRTUAL_SUBNET_PREFIX$counter
+	#echo --delete-after
+	#-qr -e robots=off -O $counter.file      dists/yakkety/
+	wget ""--bind-address=$VIRTUAL_SUBNET_PREFIX$counter -qr -e robots=off -O $counter.file $(echo $line | tr -d "\n\r") "" &
 	((counter++))
 done <$DISTRO_MIRROR_LIST
 
@@ -71,10 +81,13 @@ done
 # kill all wget processes
 printf "\nStopping all wget transfers... \n\n"
 
-echo pkill -9 wget
+#echo 
+pkill -9 wget
 
 # remove added route
 
+#echo ip route del "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$VIRTUAL_SUBNET_PREFIX"$CLICK_ADDRESS
+ip route del "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$GATEWAY"
 
 # shut down all virtual devices
 
