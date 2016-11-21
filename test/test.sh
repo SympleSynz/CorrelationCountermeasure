@@ -4,7 +4,7 @@
 
 CLICK_PROG=../click-2.0.1/click
 CLICK_SCRIPTS_DIR=../click_scripts/
-DISTRO_MIRROR_LIST=./list.txt
+DISTRO_MIRROR_LIST=./distro.list
 NETWORK_DEVICE=enp0s8
 NUMBER_HOSTS=4
 TEST_DURATION=130
