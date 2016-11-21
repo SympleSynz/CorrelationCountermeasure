@@ -15,7 +15,7 @@ CLICK_ADDRESS=254
 
 RESULTS_DIR=../results/
 
-PUSH_GIT=true
+GIT=false
 
 
 test_dir=$RESULTS_DIR$(date +%Y%m%d)
@@ -86,7 +86,7 @@ done
 
 # push results to GitHub
 
-if [ "$PUSH_GIT" = true ] ; then
+if [ "$GIT" = true ] ; then
 	git add *
 	git commit -m "Push most recent test results"
 	git push
