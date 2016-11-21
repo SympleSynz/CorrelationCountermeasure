@@ -11,27 +11,23 @@ def getFlowRate(dataFile):
 	for line in flowData:
 		element = line.split()
 		if count == 0:
-			interval = int(element[1])
-			flow = int(element[0])
+			interval = float(element[1])
+			flow = float(element[0])
 			count = 1
-		elif (int(element[1]) - interval < 1000):
-			flow += int(element[0])
+		elif (float(element[1]) - interval < 1000):
+			flow += float(element[0])
 			count += 1
-		elif (int(element[1]) - interval == 1000):
-			flow += int(element[0])
-			avgFlow = flow/(count + 1)
-			flowRate.append(avgFlow)
+		elif (float(element[1]) - interval == 1000):
+			flowRate.append(flow)
 			count = 0
-			interval = int(element[1])
+			interval = float(element[1])
 		else:
-			avgFlow = float(flow/count)
-			flowRate.append(avgFlow)
-			interval = int(element[1])
-			flow = int(element[0])
+			flowRate.append(flow)
+			interval = float(element[1])
+			flow = float(element[0])
 			count = 1
 	if count != 0:
-		avgFlow = float(flow/count)
-		flowRate.append(avgFlow)
+		flowRate.append(flow)
 	return flowRate
 
 def Rank(data):
@@ -52,9 +48,10 @@ def Spearman(srcFlowData,dstFlowData):
 		destFlowData = dstFlowData[:srcLen]
 	elif dstLen < srcLen:
 		srcFlowData = srcFlowData[:dstLen]
-#Dependent Variable: srcFlowData
-#Independent Variable: destFlowData
-
+#Independent Variable: srcFlowData
+	print("srcFlowData", srcFlowData)
+#Dependent Variable: destFlowData
+	print("dstFlowData", dstFlowData)
 #Rank Dependent Variable
 	srcRank = Rank(srcFlowData)
 	print("srcRank",srcRank)
@@ -103,6 +100,7 @@ def main():
 		correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
 	for element in correlateData:
 		resultStr = "%s %s %f %s\n" %(element[0],element[1],element[2],element[3])
+		print(resultStr)
 		results.write(resultStr)
 		
 main()
