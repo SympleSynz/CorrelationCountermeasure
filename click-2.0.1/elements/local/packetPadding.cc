@@ -52,29 +52,6 @@ void packetPadding::push(int, Packet *p)
 	srand(time(NULL)); //need a seed to actually make it random
 	int paddingBytes = rand() % 1000; 
 
-	//This creates an empty packet that we can create
-	WritablePacket *q = Packet::make(sizeof(*ether) + sizeof(*ip) + sizeof(*tcp));
-	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
-	if (q == 0) 
-	{
-		click_chatter("in packetPadding: cannot make packet!");
-		assert(0);
-	}
-	//Create a char* that will have a padding of "0" for a random value 0-999
-	// int paddingBytes = rand() % 1000;
-	// char* padding;
-	// memset(padding, '0', 1);
-	// for (int i = 0; i < (paddingBytes - 2); ++i)
-	// {
-	// 	memcpy((padding + padding.length()), "0", 1);
-	// }
-	// //add a termination character at the end to identify the length of padding later
-	// memcpy((padding + padding->length()), "\0", 1);
-	// //add the original data from the original packet
-	// memcpy((padding + padding->length()), p->data(), p->length());
-	// //Put all that in the new packet
-	// memset(q->data(), padding, padding->length());
-
 	// Need to calculate the length of the data payload in the packet. Probably packetSize - headerSize.
 	int dataLength = 0; 	
 	char* padding;
@@ -90,10 +67,21 @@ void packetPadding::push(int, Packet *p)
 	//need to add data to end of zeros
 	char* datastring = p->data();	
 	// Use: memcpy(padding, datastring, dataLength); //Need to calculate dataLength first!
-	for(int i = 0; i < p->length(); i++){
+	for(int i = 0; i < p->length(); i++)
+	{
 		padding[i] = datastring[i];
 	}
+	
+	//This creates an empty packet that we can create
+	WritablePacket *q = Packet::make(padding, sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() + paddingBytes);
+	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
+	if (q == 0) 
+	{
+		click_chatter("in packetPadding: cannot make packet!");
+		assert(0);
+	}
 
+	
 	ether = (struct click_ether *) q->data();
 	q->set_ether_header(ether);
 	ip = (struct click_ip *) q->ip_header();
