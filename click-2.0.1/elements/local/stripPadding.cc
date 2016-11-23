@@ -51,7 +51,7 @@ void stripPadding::push(int, Packet *p)
 
 	dataArray = dataArray + removePaddingBytes;
 	//This creates an empty packet that we can create
-	WritablePacket *q = Packet::make(dataArray, sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length());
+	WritablePacket *q = Packet::make(dataArray, sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() - removePaddingBytes);
 	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
 	if (q == 0) 
 	{
