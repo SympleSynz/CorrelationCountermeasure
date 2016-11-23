@@ -10,6 +10,12 @@
 #include <click/error.hh>
 #include <click/glue.hh>
 #include <click/router.hh>
+
+#include <string.h>
+#include <stdio.h>
+#include <time.h>
+#include <stdlib.h>
+
 CLICK_DECLS
 
 packetPadding::packetPadding(): _prob(0)
@@ -52,19 +58,36 @@ void packetPadding::push(int, Packet *p)
 		assert(0);
 	}
 	//Create a char* that will have a padding of "0" for a random value 0-999
-	int paddingBytes = rand() % 1000;
+	// int paddingBytes = rand() % 1000;
+	// char* padding;
+	// memset(padding, '0', 1);
+	// for (int i = 0; i < (paddingBytes - 2); ++i)
+	// {
+	// 	memcpy((padding + padding.length()), "0", 1);
+	// }
+	// //add a termination character at the end to identify the length of padding later
+	// memcpy((padding + padding->length()), "\0", 1);
+	// //add the original data from the original packet
+	// memcpy((padding + padding->length()), p->data(), p->length());
+	// //Put all that in the new packet
+	// memset(q->data(), padding, padding->length());
+
+	srand(time(NULL)); //need a seed to actually make it random
+	int paddingBytes = rand() % 1000; 
 	char* padding;
-	memset(padding, '0', 1);
-	for (int i = 0; i < (paddingBytes - 2); ++i)
-	{
-		memcpy((padding + padding.length()), "0", 1);
+	char stringp[paddingBytes + sizeof(p->data())]; //adding the string data bytes to the padding data bytes
+
+	padding = stringp; //points to stringp
+	memset(padding, '0', paddingBytes); //padding fills that amount of bytes with zero
+	padding = padding + paddingBytes; //at the end of random bytes
+
+	//need to add data to end of zeros
+	char* datastring = p->data();
+	for(int i = 0; i < sizeof(p->data()); i++){
+		padding[i] = datastring[i];
 	}
-	//add a termination character at the end to identify the length of padding later
-	memcpy((padding + padding->length()), "\0", 1);
-	//add the original data from the original packet
-	memcpy((padding + padding->length()), p->data(), p->length());
-	//Put all that in the new packet
-	memset(q->data(), padding, padding->length());
+
+
 
 	ether = (struct click_ether *) q->data();
 	q->set_ether_header(ether);
