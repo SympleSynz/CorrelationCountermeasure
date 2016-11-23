@@ -49,31 +49,17 @@ void packetPadding::push(int, Packet *p)
 	struct click_ip *ip_recv;
 	struct click_tcp *tcp_recv;
 
+	srand(time(NULL)); //need a seed to actually make it random
+	int paddingBytes = rand() % 1000; 
 	//This creates an empty packet that we can create
-	WritablePacket *q = Packet::make(sizeof(*ether) + sizeof(*ip) + sizeof(*tcp));
+	WritablePacket *q = Packet::make(sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() + paddingBytes);
 	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
 	if (q == 0) 
 	{
 		click_chatter("in packetPadding: cannot make packet!");
 		assert(0);
 	}
-	//Create a char* that will have a padding of "0" for a random value 0-999
-	// int paddingBytes = rand() % 1000;
-	// char* padding;
-	// memset(padding, '0', 1);
-	// for (int i = 0; i < (paddingBytes - 2); ++i)
-	// {
-	// 	memcpy((padding + padding.length()), "0", 1);
-	// }
-	// //add a termination character at the end to identify the length of padding later
-	// memcpy((padding + padding->length()), "\0", 1);
-	// //add the original data from the original packet
-	// memcpy((padding + padding->length()), p->data(), p->length());
-	// //Put all that in the new packet
-	// memset(q->data(), padding, padding->length());
-
-	srand(time(NULL)); //need a seed to actually make it random
-	int paddingBytes = rand() % 1000; 
+	
 	char* padding;
 	char stringp[paddingBytes + sizeof(p->data())]; //adding the string data bytes to the padding data bytes
 
