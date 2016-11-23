@@ -52,10 +52,20 @@ void stripPadding::push(int, Packet *p)
 		click_chatter("in stripPadding: cannot make packet!");
 		assert(0);
 	}
-	//This gets the index of the very first occurance of '\0'
-	int strippedData = int(strchr(p->data(), '\0')-p->data()+1);
-	//Sets the original data of p to q, stripping off everything before the '\0'
-	memset(q->data(), (p->data()+strippedData), (p->length()-strippedData));
+	// //This gets the index of the very first occurance of '\0'
+	// int strippedData = int(strchr(p->data(), '\0')-p->data()+1);
+	// //Sets the original data of p to q, stripping off everything before the '\0'
+	// memset(q->data(), (p->data()+strippedData), (p->length()-strippedData));
+	
+	char* dataArray = stringp;
+	int removePaddingBytes;
+	memcpy(&removePaddingBytes, dataArray, sizeof(int));
+	printf("removePaddingBytes: %d, dataArray: %s \n", removePaddingBytes, dataArray);
+
+	dataArray = dataArray + removePaddingBytes;
+	printf("dataArray: %s", dataArray);
+	printf("\n");
+
 
 	ether = (struct click_ether *) q->data();
 	q->set_ether_header(ether);
