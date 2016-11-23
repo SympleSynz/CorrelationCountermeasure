@@ -51,29 +51,48 @@ void packetPadding::push(int, Packet *p)
 
 	srand(time(NULL)); //need a seed to actually make it random
 	int paddingBytes = rand() % 1000; 
+
 	//This creates an empty packet that we can create
-	WritablePacket *q = Packet::make(sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() + paddingBytes);
+	WritablePacket *q = Packet::make(sizeof(*ether) + sizeof(*ip) + sizeof(*tcp));
 	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
 	if (q == 0) 
 	{
 		click_chatter("in packetPadding: cannot make packet!");
 		assert(0);
 	}
-	
+	//Create a char* that will have a padding of "0" for a random value 0-999
+	// int paddingBytes = rand() % 1000;
+	// char* padding;
+	// memset(padding, '0', 1);
+	// for (int i = 0; i < (paddingBytes - 2); ++i)
+	// {
+	// 	memcpy((padding + padding.length()), "0", 1);
+	// }
+	// //add a termination character at the end to identify the length of padding later
+	// memcpy((padding + padding->length()), "\0", 1);
+	// //add the original data from the original packet
+	// memcpy((padding + padding->length()), p->data(), p->length());
+	// //Put all that in the new packet
+	// memset(q->data(), padding, padding->length());
+
+	// Need to calculate the length of the data payload in the packet. Probably packetSize - headerSize.
+	int dataLength = 0; 	
 	char* padding;
-	char stringp[paddingBytes + sizeof(p->data())]; //adding the string data bytes to the padding data bytes
+	char stringp[paddingBytes + p->length()]; //adding the string data bytes to the padding data bytes
 
 	padding = stringp; //points to stringp
-	memset(padding, '0', paddingBytes); //padding fills that amount of bytes with zero
+	//memset(padding, '0', paddingBytes); //padding fills that amount of bytes with zero
+	// We don't actually care what the padding is filled with, since it's never going to be read.	
+	// memcpy the 8 byte (or 4 byte) integer on to the first 8 chars of padding.
+	memcpy(padding, &paddingBytes, sizeof(int));
+	// Possible alternative: *((int *) padding) = paddingBytes; //Store integer paddingBytes as the first 8 chars of the padding array.	
 	padding = padding + paddingBytes; //at the end of random bytes
-
 	//need to add data to end of zeros
-	char* datastring = p->data();
-	for(int i = 0; i < sizeof(p->data()); i++){
+	char* datastring = p->data();	
+	// Use: memcpy(padding, datastring, dataLength); //Need to calculate dataLength first!
+	for(int i = 0; i < p->length(); i++){
 		padding[i] = datastring[i];
 	}
-
-
 
 	ether = (struct click_ether *) q->data();
 	q->set_ether_header(ether);
