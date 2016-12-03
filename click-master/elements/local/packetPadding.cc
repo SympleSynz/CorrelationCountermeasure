@@ -32,7 +32,7 @@ int packetPadding::configure(Vector<String> &conf, ErrorHandler *errh)
     if (Args(conf, this, errh).read_p("PADDING", new_maxPad).complete() < 0)
         return -1;
 
-    if (new_maxPad < 0 ) {
+    if (new_maxPad < 4 ) {
         return -1;
     }
     
@@ -52,7 +52,7 @@ void packetPadding::push(int, Packet *p)
 	struct click_ip *ip_recv;
 	struct click_tcp *tcp_recv;
 
-	int paddingBytes = rand() % _maxPad; 
+	int paddingBytes = rand() % _maxPad + 4; 
 
 	// Need to calculate the length of the data payload in the packet. Probably packetSize - headerSize.
 	int dataLength = 0; 	
@@ -133,7 +133,7 @@ void packetPadding::push(int, Packet *p)
 	// Packet q is ready
 
 	p->kill();
-	output(1).push(q);
+	output(0).push(q);
 
 }
 
