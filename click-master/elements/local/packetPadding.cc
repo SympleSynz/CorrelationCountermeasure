@@ -28,14 +28,17 @@ packetPadding::~packetPadding()
 
 int packetPadding::configure(Vector<String> &conf, ErrorHandler *errh)
 {
-    int new_prob = 100;
-    if (Args(conf, this, errh).read_p("PROBABILITY", new_prob).complete() < 0)
+    int new_maxPad = 1000;
+    if (Args(conf, this, errh).read_p("PADDING", new_maxPad).complete() < 0)
         return -1;
 
-    if (new_prob < 0 || new_prob > 100) {
+    if (new_maxPad < 0 ) {
         return -1;
     }
-    _prob = new_prob;
+    
+    srand(time(NULL)); //seed randomizer.
+    
+    _maxPad = new_maxPad;
     return 0;
 }
 
@@ -49,8 +52,7 @@ void packetPadding::push(int, Packet *p)
 	struct click_ip *ip_recv;
 	struct click_tcp *tcp_recv;
 
-	srand(time(NULL)); //need a seed to actually make it random
-	int paddingBytes = rand() % 1000; 
+	int paddingBytes = rand() % _maxPad; 
 
 	// Need to calculate the length of the data payload in the packet. Probably packetSize - headerSize.
 	int dataLength = 0; 	

@@ -7,14 +7,14 @@ class packetPadding : public Element
 { 
 	public:
 
-  		int _prob;
+  		int _maxPad;
 
 	public:
   		packetPadding();
   		~packetPadding();
 
   		const char *class_name() const	{ return "packetPadding"; }
-  		const char *port_count() const	{ return "1/2"; }
+  		const char *port_count() const	{ return "1/1"; }
   		const char *processing() const  { return PUSH; }
 
   		void push(int, Packet *);
