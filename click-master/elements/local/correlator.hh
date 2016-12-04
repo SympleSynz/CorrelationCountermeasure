@@ -44,7 +44,7 @@ public:
 	int configure(Vector<String>&, ErrorHandler*);
 
 private:
-	void snoopPacket(const struct click_ip*, const struct click_tcp*);
+	void snoopPacket(Packet* p);
 
 };
 
