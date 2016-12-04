@@ -24,6 +24,10 @@ to the sender, with the TCP RST flag set.
 class Correlator : public Element { 
 
 private:
+	long startTime;
+	long currentTime;
+	struct timespec time_struct;
+
 	String folder;
 	char fileName[128];
 	char fileOutput[128];

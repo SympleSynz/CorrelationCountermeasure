@@ -35,13 +35,16 @@ int Correlator::configure(Vector<String> &conf, ErrorHandler *errh)
 	struct stat st;
 	if (stat(folder.c_str(), &st) == -1)
 	{
-		mkdir(folder.c_str(), 0744);
+		mkdir(folder.c_str(), 644);
 		if (stat(folder.c_str(), &st) == -1)
 		{
 			return -1;
 		}
 	}
 	
+	clock_gettime(CLOCK_MONOTONIC, &time_struct);
+	startTime = ( time_struct.tv_sec * 1000000 ) + ( time_struct.tv_nsec / 1000 );
+
 	return 0;
 }
 
@@ -64,13 +67,29 @@ void Correlator::push(int, Packet *p)
 
 void Correlator::snoopPacket(const struct click_ip* ipHeader, const struct click_tcp* tcpHeader)
 {
-	char* srcAddress;
-	char* destAddress;
+	char srcAddress[16];
+	char destAddress[16];
 	uint16_t srcPort;
 	uint16_t destPort;
 	
-	srcAddress = inet_ntoa(ipHeader->ip_src);
-	destAddress = inet_ntoa(ipHeader->ip_dst);
+	//srcAddress = inet_ntoa(ipHeader->ip_src);
+	//destAddress = inet_ntoa(ipHeader->ip_dst);
+	
+	clock_gettime(CLOCK_MONOTONIC, &time_struct);
+	currentTime = ( time_struct.tv_sec * 1000000 ) + ( time_struct.tv_nsec / 1000 );
+	
+	sprintf(srcAddress, "%d.%d.%d.%d\n",
+		int(ipHeader->ip_src.s_addr&0xFF), 
+		int((ipHeader->ip_src.s_addr&0xFF00)>>8),
+		int((ipHeader->ip_src.s_addr&0xFF0000)>>16),
+		int((ipHeader->ip_src.s_addr&0xFF000000)>>24));
+
+	sprintf(destAddress, "%d.%d.%d.%d\n",
+		int(ipHeader->ip_dst.s_addr&0xFF), 
+		int((ipHeader->ip_dst.s_addr&0xFF00)>>8),
+		int((ipHeader->ip_dst.s_addr&0xFF0000)>>16),
+		int((ipHeader->ip_dst.s_addr&0xFF000000)>>24));
+	
 	srcPort = tcpHeader->th_sport;
 	destPort = tcpHeader->th_dport;
 	
