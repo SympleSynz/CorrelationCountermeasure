@@ -2,22 +2,20 @@
 # test script for creating virtual network devices
 
 # Test Settings
-NETWORK_DEVICE=wlan0
-NUMBER_HOSTS=2
-TEST_DURATION=5
-
-GATEWAY=10.0.0.1
+NETWORK_DEVICE=enp0s3
+NUMBER_HOSTS=5
+TEST_DURATION=15
 
 # Address
 VIRTUAL_SUBNET_PREFIX=19.19.19.
 VIRTUAL_MASK=24
-CLICK_ADDRESS=254
+#CLICK_ADDRESS=254
 
 # Path
-CLICK_PROG=../click-2.0.1/click
-CLICK_SCRIPTS_DIR=../click_scripts/
+#CLICK_PROG=../click-2.0.1/click
+#CLICK_SCRIPTS_DIR=../click_scripts/
 DISTRO_MIRROR_LIST=$(pwd)/distro.list
-RESULTS_DIR=../results/
+#RESULTS_DIR=../results/
 
 # Options
 GIT=false
@@ -32,24 +30,13 @@ GIT=false
 # Make virtual devices
 printf "Setting network devices... \n\n"
 
-ifconfig $NETWORK_DEVICE:0 $VIRTUAL_SUBNET_PREFIX$CLICK_ADDRESS
+#ifconfig $NETWORK_DEVICE:0 $VIRTUAL_SUBNET_PREFIX$CLICK_ADDRESS
 
 counter=1
 while [ $counter -le $NUMBER_HOSTS ]; do
 	ifconfig $NETWORK_DEVICE:$counter $VIRTUAL_SUBNET_PREFIX$counter
 	((counter++))
 done
-
-# Set route from all virtual network adapters to click adapter
-printf "Setting routes... \n\n"
-
-#echo ip route add "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$VIRTUAL_SUBNET_PREFIX"$CLICK_ADDRESS
-ip route add "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$GATEWAY"
-
-# run click
-printf "starting click middlebox... \n\n"
-
-echo $CLICK_PROG 
 
 # start wget for all 50 devices
 printf "Begining wget transfers... \n\n"
@@ -87,11 +74,11 @@ pkill -9 wget
 # remove added route
 
 #echo ip route del "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$VIRTUAL_SUBNET_PREFIX"$CLICK_ADDRESS
-ip route del "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$GATEWAY"
+#ip route del "$VIRTUAL_SUBNET_PREFIX"0/$VIRTUAL_MASK via "$GATEWAY"
 
 # shut down all virtual devices
 
-counter=0
+counter=1
 while [ $counter -le $NUMBER_HOSTS ]; do
 	echo ifconfig $NETWORK_DEVICE:$counter down
 	((counter++))
