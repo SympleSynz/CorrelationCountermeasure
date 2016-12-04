@@ -49,28 +49,28 @@ def Spearman(srcFlowData,dstFlowData):
 	elif dstLen < srcLen:
 		srcFlowData = srcFlowData[:dstLen]
 #Independent Variable: srcFlowData
-	print("srcFlowData", srcFlowData)
+	#print("srcFlowData", srcFlowData)
 #Dependent Variable: destFlowData
-	print("dstFlowData", dstFlowData)
+	#print("dstFlowData", dstFlowData)
 #Rank Dependent Variable
 	srcRank = Rank(srcFlowData)
-	print("srcRank",srcRank)
+	#print("srcRank",srcRank)
 #Rank Independent Variable
 	dstRank = Rank(dstFlowData)
-	print("destRank",dstRank)
+	#print("destRank",dstRank)
 #Difference in Rank
 	difference = []
 	for i in range(len(srcRank)):
 		difference.append(srcRank[i] - dstRank[i])
-	print("Rank diff",difference)
+	#print("Rank diff",difference)
 #Square Difference
 	for i in range(len(difference)):
 		difference[i] = difference[i]**2
-	print("Square diff",difference)
+	#print("Square diff",difference)
 #Calculate correlation
 	sumSquareDiff = sum(difference)
 	nSize = len(srcFlowData)
-	print("Sum of square difference",sumSquareDiff)
+	#print("Sum of square difference",sumSquareDiff)
 	correlation = 1 - ((6*sum(difference)/(nSize*(nSize**2-1))))
 	return correlation
 
@@ -90,17 +90,17 @@ def main():
 	results = open("resultsCorrelation.txt","a")
 	correlateData = []
 	for srcFilename in os.listdir("results/client/"):
-		srcFlowData = getFlowRate(("client/"+srcFilename))
+		srcFlowData = getFlowRate(("results/client/"+srcFilename))
 		spearmanData = []
 		for dstFilename in os.listdir("results/server/"):
-			dstFlowData = getFlowRate(("server/"+dstFilename))
+			dstFlowData = getFlowRate(("results/server/"+dstFilename))
 			spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
 		highestCorrelation = max(spearmanData,key=itemgetter(0))
 		evaluation = eval(highestCorrelation[0])
 		correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
 	for element in correlateData:
 		resultStr = "%s %s %f %s\n" %(element[0],element[1],element[2],element[3])
-		print(resultStr)
+		#print(resultStr)
 		results.write(resultStr)
 		
 main()
