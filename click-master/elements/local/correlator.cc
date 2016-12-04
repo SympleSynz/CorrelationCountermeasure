@@ -78,13 +78,13 @@ void Correlator::snoopPacket(const struct click_ip* ipHeader, const struct click
 	clock_gettime(CLOCK_MONOTONIC, &time_struct);
 	currentTime = ( time_struct.tv_sec * 1000000 ) + ( time_struct.tv_nsec / 1000 );
 	
-	sprintf(srcAddress, "%d.%d.%d.%d\n",
+	sprintf(srcAddress, "%d.%d.%d.%d",
 		int(ipHeader->ip_src.s_addr&0xFF), 
 		int((ipHeader->ip_src.s_addr&0xFF00)>>8),
 		int((ipHeader->ip_src.s_addr&0xFF0000)>>16),
 		int((ipHeader->ip_src.s_addr&0xFF000000)>>24));
 
-	sprintf(destAddress, "%d.%d.%d.%d\n",
+	sprintf(destAddress, "%d.%d.%d.%d",
 		int(ipHeader->ip_dst.s_addr&0xFF), 
 		int((ipHeader->ip_dst.s_addr&0xFF00)>>8),
 		int((ipHeader->ip_dst.s_addr&0xFF0000)>>16),
@@ -96,7 +96,7 @@ void Correlator::snoopPacket(const struct click_ip* ipHeader, const struct click
 	sprintf(fileName, "./%s/%s-%d_%s-%d.out", folder.c_str(), srcAddress, srcPort, destAddress, destPort);
 	
 	FILE* output = fopen(fileName, "a");
-	fprintf(output, "%ld\t%d\n", time(0) ,ipHeader->ip_len );
+	fprintf(output, "%ld\t%d\n", currentTime - startTime ,ipHeader->ip_len );
 	fclose(output);
 }
 
