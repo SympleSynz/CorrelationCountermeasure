@@ -80,7 +80,7 @@ pkill -9 wget
 
 counter=1
 while [ $counter -le $NUMBER_HOSTS ]; do
-	echo ifconfig $NETWORK_DEVICE:$counter down
+	ifconfig $NETWORK_DEVICE:$counter down
 	((counter++))
 done
 
