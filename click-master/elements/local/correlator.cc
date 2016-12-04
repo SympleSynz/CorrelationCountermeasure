@@ -60,8 +60,8 @@ void Correlator::snoopPacket(Packet *p)
 {
 	char srcAddress[16];
 	char destAddress[16];
-	uint16_t srcPort;
-	uint16_t destPort;
+	//uint16_t srcPort;
+	//uint16_t destPort;
 	
 	const struct click_ip* ipHeader = p->ip_header();
 	const struct click_tcp* tcpHeader = p->tcp_header();
@@ -84,11 +84,12 @@ void Correlator::snoopPacket(Packet *p)
 		int((ipHeader->ip_dst.s_addr&0xFF0000)>>16),
 		int((ipHeader->ip_dst.s_addr&0xFF000000)>>24));
 	
-	srcPort = tcpHeader->th_sport;
-	destPort = tcpHeader->th_dport;
+	//srcPort = tcpHeader->th_sport;
+	//destPort = tcpHeader->th_dport;
 	
-	sprintf(fileName, "./%s/%s-%d_%s-%d.out", folder.c_str(), srcAddress, srcPort, destAddress, destPort);
-	
+	//sprintf(fileName, "./%s/%s-%d_%s-%d.out", folder.c_str(), srcAddress, srcPort, destAddress, destPort);
+	sprintf(fileName, "./%s/%s_%s.out", folder.c_str(), srcAddress, destAddress);
+
 	FILE* output = fopen(fileName, "a");
 	fprintf(output, "%ld\t%d\n", currentTime - startTime , p->length() );
 	fclose(output);
