@@ -35,7 +35,7 @@ int Correlator::configure(Vector<String> &conf, ErrorHandler *errh)
 	struct stat st;
 	if (stat(folder.c_str(), &st) == -1)
 	{
-		mkdir(folder.c_str(), 644);
+		mkdir(folder.c_str(), 0777);
 		if (stat(folder.c_str(), &st) == -1)
 		{
 			return -1;
@@ -51,26 +51,20 @@ int Correlator::configure(Vector<String> &conf, ErrorHandler *errh)
 
 void Correlator::push(int, Packet *p)
 {
-	if ( p->has_network_header	() )
-	{
-		const struct click_ip* ipHeader = p->ip_header();
-		
-		if (ipHeader->ip_p == IP_PROTO_TCP )
-		{
-			const struct click_tcp* tcpHeader = p->tcp_header();
-			snoopPacket(ipHeader, tcpHeader);
-		}
-	}
+	snoopPacket(p);
 	
 	output(0).push(p);
 }
 
-void Correlator::snoopPacket(const struct click_ip* ipHeader, const struct click_tcp* tcpHeader)
+void Correlator::snoopPacket(Packet *p)
 {
 	char srcAddress[16];
 	char destAddress[16];
 	uint16_t srcPort;
 	uint16_t destPort;
+	
+	const struct click_ip* ipHeader = p->ip_header();
+	const struct click_tcp* tcpHeader = p->tcp_header();
 	
 	//srcAddress = inet_ntoa(ipHeader->ip_src);
 	//destAddress = inet_ntoa(ipHeader->ip_dst);
@@ -96,7 +90,7 @@ void Correlator::snoopPacket(const struct click_ip* ipHeader, const struct click
 	sprintf(fileName, "./%s/%s-%d_%s-%d.out", folder.c_str(), srcAddress, srcPort, destAddress, destPort);
 	
 	FILE* output = fopen(fileName, "a");
-	fprintf(output, "%ld\t%d\n", currentTime - startTime ,ipHeader->ip_len );
+	fprintf(output, "%ld\t%d\n", currentTime - startTime , p->length() );
 	fclose(output);
 }
 
