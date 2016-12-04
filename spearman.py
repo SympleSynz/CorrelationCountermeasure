@@ -89,10 +89,10 @@ def eval(correlation):
 def main():
 	results = open("resultsCorrelation.txt","a")
 	correlateData = []
-	for srcFilename in os.listdir("client/"):
+	for srcFilename in os.listdir("results/client/"):
 		srcFlowData = getFlowRate(("client/"+srcFilename))
 		spearmanData = []
-		for dstFilename in os.listdir("server/"):
+		for dstFilename in os.listdir("results/server/"):
 			dstFlowData = getFlowRate(("server/"+dstFilename))
 			spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
 		highestCorrelation = max(spearmanData,key=itemgetter(0))
