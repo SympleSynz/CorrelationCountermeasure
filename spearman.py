@@ -11,20 +11,20 @@ def getFlowRate(dataFile):
 	for line in flowData:
 		element = line.split()
 		if count == 0:
-			interval = float(element[1])
-			flow = float(element[0])
+			interval = float(element[0])
+			flow = float(element[1])
 			count = 1
-		elif (float(element[1]) - interval < 1000):
-			flow += float(element[0])
+		elif (float(element[0]) - interval < 100):
+			flow += float(element[1])
 			count += 1
-		elif (float(element[1]) - interval == 1000):
-			flowRate.append(flow)
+		elif (float(element[0]) - interval == 100):
+			flowRate.append(flow/100)
 			count = 0
-			interval = float(element[1])
+			interval = float(element[0])
 		else:
-			flowRate.append(flow)
-			interval = float(element[1])
-			flow = float(element[0])
+			flowRate.append(flow/100)
+			interval = float(element[0])
+			flow = float(element[1])
 			count = 1
 	if count != 0:
 		flowRate.append(flow)
@@ -87,14 +87,17 @@ def eval(correlation):
 		return "very strong"
 
 def main():
-	results = open("resultsCorrelation.txt","a")
+	results = open("resultsCorrelationBaseline.txt","a")
 	correlateData = []
-	for srcFilename in os.listdir("results/client/"):
-		srcFlowData = getFlowRate(("results/client/"+srcFilename))
+	for srcFilename in os.listdir("results/newResults/client/"):
+		srcFlowData = getFlowRate(("results/newResults/client/"+srcFilename))
 		spearmanData = []
-		for dstFilename in os.listdir("results/server/"):
-			dstFlowData = getFlowRate(("results/server/"+dstFilename))
+		for dstFilename in os.listdir("results/newResults/server/"):
+			dstFlowData = getFlowRate(("results/newResults/server/"+dstFilename))
 			spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
+		# for dst in spearmanData:
+		# 	dstResults = "%s %s %f\n" %(srcFilename,dst[1],dst[0])
+		# 	results.write(dstResults)
 		highestCorrelation = max(spearmanData,key=itemgetter(0))
 		evaluation = eval(highestCorrelation[0])
 		correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
