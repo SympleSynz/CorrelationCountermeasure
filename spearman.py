@@ -77,7 +77,7 @@ def eval(correlation):
 def main():
 	with open("resultsCorrelationBaseline.csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
-		writer = csv.writer(results,delimiter=' ')
+		writer = csv.writer(results)
 		correlateData = []
 		# srcFilename = "results/average/20161205063812/client/112.124.140.210_19.19.19.2.out.average"
 		# dstFilename = "results/average/20161205063812/server/193.1.193.64_19.19.19.25.out.average"
@@ -88,13 +88,13 @@ def main():
 		#count = 0
 		for srcFilename in os.listdir("results/average/20161205063812/client/"):
 			srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
-			src = "%s "%(srcFilename)
+			#src = "%s "%(srcFilename)
 			#results.write(src)
 			spearmanData = []
 			if srcFilename == "all.csv":
 				pass
 			else:
-				writer.writerow(src)
+				writer.writerow((srcFilename))
 				for dstFilename in os.listdir("results/average/20161205063812/server/"):
 					if dstFilename == "all.csv":
 						pass
@@ -102,16 +102,19 @@ def main():
 						dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
 						spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
 				for dst in spearmanData:
-					dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))
-				 	writer.writerow(dstResults)
+					#dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))
+					coef = "%f"%(dst[0])
+					evaluate = eval(dst[0])
+				 	writer.writerow((dst[1],coef,evaluate))
 				 	#results.write(dstResults)
 				highestCorrelation = max(spearmanData,key=itemgetter(0))
 				evaluation = eval(highestCorrelation[0])
 				correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
 		for element in correlateData:
-			resultStr = "%s %s %f %s " %(element[0],element[1],element[2],element[3])
+			#resultStr = "%s %s %f %s " %(element[0],element[1],element[2],element[3])
 			#print(resultStr)
-			writer.writerow(resultStr)
+			correlate = element[2]
+			writer.writerow((element[0],element[1],correlate,element[3]))
 			#results.write(resultStr)
 			
 main()
