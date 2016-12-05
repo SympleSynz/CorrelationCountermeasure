@@ -18,21 +18,21 @@
 
 CLICK_DECLS
 
-checkCoverTraffice::checkCoverTraffice(): _prob(0)
+checkCoverTraffic::checkCoverTraffic()
 {
 }
 
-coverTraffic::~checkCoverTraffice()
+coverTraffic::~checkCoverTraffic()
 {
 }
 
-int checkCoverTraffice::configure(Vector<String> &conf, ErrorHandler *errh)
+/*int checkCoverTraffic::configure(Vector<String> &conf, ErrorHandler *errh)
 {
     return 0;
 }
+*/
 
-
-void checkCoverTraffice::push(int, Packet *p)
+void checkCoverTraffic::push(int, Packet *p)
 {
 	struct click_ip *ip;
 	ip = (struct click_ip *) q->ip_header();
@@ -44,5 +44,5 @@ void checkCoverTraffice::push(int, Packet *p)
 
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(checkCoverTraffice)
-ELEMENT_MT_SAFE(checkCoverTraffice)
+EXPORT_ELEMENT(checkCoverTraffic)
+ELEMENT_MT_SAFE(checkCoverTraffic)

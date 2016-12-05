@@ -6,10 +6,6 @@ CLICK_DECLS
 class checkCoverTraffic : public Element 
 { 
 	public:
-
-  		int _maxPad;
-
-	public:
   		checkCoverTraffic();
   		~checkCoverTraffic();
 
@@ -18,7 +14,7 @@ class checkCoverTraffic : public Element
   		const char *processing() const  { return PUSH; }
 
   		void push(int, Packet *);
-  		int configure(Vector<String>&, ErrorHandler*);
+  		//int configure(Vector<String>&, ErrorHandler*);
 
 };
 
