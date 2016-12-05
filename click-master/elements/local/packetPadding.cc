@@ -18,7 +18,7 @@
 
 CLICK_DECLS
 
-packetPadding::packetPadding():
+packetPadding::packetPadding()
 {
 }
 
@@ -55,7 +55,7 @@ void packetPadding::push(int, Packet *p)
 	int paddingBytes = rand() % _maxPad + 4; 
 
 	// Need to calculate the length of the data payload in the packet. Probably packetSize - headerSize.
-	int dataLength = 0; 	
+	//int dataLength = 0; 	
 	char* padding;
 	char stringp[paddingBytes + p->length()]; //adding the string data bytes to the padding data bytes
 
@@ -69,7 +69,7 @@ void packetPadding::push(int, Packet *p)
 	//need to add data to end of zeros
 	const unsigned char* datastring = p->data();	
 	// Use: memcpy(padding, datastring, dataLength); //Need to calculate dataLength first!
-	for(int i = 0; i < p->length(); i++)
+	for(unsigned int i = 0; i < p->length(); i++)
 	{
 		padding[i] = datastring[i];
 	}
