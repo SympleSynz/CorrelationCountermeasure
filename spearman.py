@@ -1,6 +1,7 @@
 from __future__ import division
 import os
 import copy
+import csv
 from operator import itemgetter
 
 def getFlowRate(dataFile):
@@ -63,7 +64,7 @@ def Spearman(srcFlowData,dstFlowData):
 
 def eval(correlation):
 	if abs(correlation) > 0.00 and abs(correlation) <= 0.19:
-		return "very weak"
+		return "very-weak"
 	elif abs(correlation) > 0.19 and abs(correlation) <= 0.39:
 		return "weak"
 	elif abs(correlation) > 0.39 and abs(correlation) <= 0.59:
@@ -71,41 +72,46 @@ def eval(correlation):
 	elif abs(correlation) > 0.59 and abs(correlation) <= 0.79:
 		return "strong"
 	else:
-		return "very strong"
+		return "very-strong"
 
 def main():
-	results = open("resultsCorrelationBaseline.txt","w")
-	correlateData = []
-	# srcFilename = "results/average/20161205063812/client/112.124.140.210_19.19.19.2.out.average"
-	# dstFilename = "results/average/20161205063812/server/193.1.193.64_19.19.19.25.out.average"
-	# srcFlowData = getFlowRate(srcFilename)
-	# dstFlowData = getFlowRate(dstFilename)
-	# correlation = Spearman(srcFlowData,dstFlowData)
-	# print(correlation)
-	#count = 0
-	for srcFilename in os.listdir("results/average/20161205063812/client/"):
-		srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
-		src = "%s:\n"%(srcFilename)
-		results.write(src)
-		spearmanData = []
-		if srcFilename == "all.csv":
-			pass
-		else:
-			for dstFilename in os.listdir("results/average/20161205063812/server/"):
-				if dstFilename == "all.csv":
-					pass
-				else:
-					dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
-					spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
-			for dst in spearmanData:
-				dstResults = "		%s %f %s\n" %(dst[1],dst[0],eval(dst[0]))
-			 	results.write(dstResults)
-			highestCorrelation = max(spearmanData,key=itemgetter(0))
-			evaluation = eval(highestCorrelation[0])
-			correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
-	for element in correlateData:
-		resultStr = "%s %s %f %s\n" %(element[0],element[1],element[2],element[3])
-		#print(resultStr)
-		results.write(resultStr)
-		
+	with open("resultsCorrelationBaseline.csv","wb") as results:
+	#results = open("resultsCorrelationBaseline.csv","wb")
+		writer = csv.writer(results,delimiter=' ')
+		correlateData = []
+		# srcFilename = "results/average/20161205063812/client/112.124.140.210_19.19.19.2.out.average"
+		# dstFilename = "results/average/20161205063812/server/193.1.193.64_19.19.19.25.out.average"
+		# srcFlowData = getFlowRate(srcFilename)
+		# dstFlowData = getFlowRate(dstFilename)
+		# correlation = Spearman(srcFlowData,dstFlowData)
+		# print(correlation)
+		#count = 0
+		for srcFilename in os.listdir("results/average/20161205063812/client/"):
+			srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
+			src = "%s "%(srcFilename)
+			#results.write(src)
+			spearmanData = []
+			if srcFilename == "all.csv":
+				pass
+			else:
+				writer.writerow(src)
+				for dstFilename in os.listdir("results/average/20161205063812/server/"):
+					if dstFilename == "all.csv":
+						pass
+					else:
+						dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
+						spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
+				for dst in spearmanData:
+					dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))
+				 	writer.writerow(dstResults)
+				 	#results.write(dstResults)
+				highestCorrelation = max(spearmanData,key=itemgetter(0))
+				evaluation = eval(highestCorrelation[0])
+				correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
+		for element in correlateData:
+			resultStr = "%s %s %f %s " %(element[0],element[1],element[2],element[3])
+			#print(resultStr)
+			writer.writerow(resultStr)
+			#results.write(resultStr)
+			
 main()
