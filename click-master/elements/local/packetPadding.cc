@@ -18,7 +18,7 @@
 
 CLICK_DECLS
 
-packetPadding::packetPadding(): _prob(0)
+packetPadding::packetPadding():
 {
 }
 
@@ -67,7 +67,7 @@ void packetPadding::push(int, Packet *p)
 	// Possible alternative: *((int *) padding) = paddingBytes; //Store integer paddingBytes as the first 8 chars of the padding array.	
 	padding = padding + paddingBytes; //at the end of random bytes
 	//need to add data to end of zeros
-	char* datastring = p->data();	
+	const unsigned char* datastring = p->data();	
 	// Use: memcpy(padding, datastring, dataLength); //Need to calculate dataLength first!
 	for(int i = 0; i < p->length(); i++)
 	{
