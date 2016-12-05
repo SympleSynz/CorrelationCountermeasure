@@ -74,7 +74,7 @@ def eval(correlation):
 		return "very strong"
 
 def main():
-	results = open("resultsCorrelationBaseline.txt","a")
+	results = open("resultsCorrelationBaseline.txt","w")
 	correlateData = []
 	# srcFilename = "results/average/20161205063812/client/112.124.140.210_19.19.19.2.out.average"
 	# dstFilename = "results/average/20161205063812/server/193.1.193.64_19.19.19.25.out.average"
