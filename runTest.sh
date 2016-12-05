@@ -12,7 +12,8 @@ output_dir=$results_dir/(date +%Y%m%d%H%M%S)/
 mkdir $output_dir
 cd $output_dir
 
-echo "Click must be run as sudo - Please press ctrl+c when test is complete"
+echo "Running $1 - Please press ctrl+c when test is complete"
+
 sudo $click_program $click_file
 
 
