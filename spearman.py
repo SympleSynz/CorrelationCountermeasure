@@ -62,13 +62,13 @@ def Spearman(srcFlowData,dstFlowData):
 	return correlation
 
 def eval(correlation):
-	if abs(correlation) >= 0.00 and abs(correlation) <= 0.19:
+	if abs(correlation) > 0.00 and abs(correlation) <= 0.19:
 		return "very weak"
-	elif abs(correlation) >= 0.2 and abs(correlation) <= 0.39:
+	elif abs(correlation) > 0.19 and abs(correlation) <= 0.39:
 		return "weak"
-	elif abs(correlation) >= 0.4 and abs(correlation) <= 0.59:
+	elif abs(correlation) > 0.39 and abs(correlation) <= 0.59:
 		return "moderate"
-	elif abs(correlation) >= 0.6 and abs(correlation) <= 0.79:
+	elif abs(correlation) > 0.59 and abs(correlation) <= 0.79:
 		return "strong"
 	else:
 		return "very strong"
@@ -85,16 +85,24 @@ def main():
 	#count = 0
 	for srcFilename in os.listdir("results/average/20161205063812/client/"):
 		srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
+		src = "%s:\n"%(srcFilename)
+		results.write(src)
 		spearmanData = []
-		for dstFilename in os.listdir("results/average/20161205063812/server/"):
-			dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
-			spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
-		# for dst in spearmanData:
-		# 	dstResults = "\n%s %s %f\n" %(srcFilename,dst[1],dst[0])
-		# 	results.write(dstResults)
-		highestCorrelation = max(spearmanData,key=itemgetter(0))
-		evaluation = eval(highestCorrelation[0])
-		correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
+		if srcFilename == "all.csv":
+			pass
+		else:
+			for dstFilename in os.listdir("results/average/20161205063812/server/"):
+				if dstFilename == "all.csv":
+					pass
+				else:
+					dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
+					spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
+			for dst in spearmanData:
+				dstResults = "		%s %f %s\n" %(dst[1],dst[0],eval(dst[0]))
+			 	results.write(dstResults)
+			highestCorrelation = max(spearmanData,key=itemgetter(0))
+			evaluation = eval(highestCorrelation[0])
+			correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
 	for element in correlateData:
 		resultStr = "%s %s %f %s\n" %(element[0],element[1],element[2],element[3])
 		#print(resultStr)
