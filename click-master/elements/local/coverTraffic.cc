@@ -36,7 +36,7 @@ int coverTraffic::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	if(new_prob < 0 || new_prob > 100)
 	{
-		return -1
+		return -1;
 	}
 	_prob = new_prob;
 	return 0;
