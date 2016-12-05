@@ -64,7 +64,7 @@ void Correlator::snoopPacket(Packet *p)
 	//uint16_t destPort;
 	
 	const struct click_ip* ipHeader = p->ip_header();
-	const struct click_tcp* tcpHeader = p->tcp_header();
+	//const struct click_tcp* tcpHeader = p->tcp_header();
 	
 	//srcAddress = inet_ntoa(ipHeader->ip_src);
 	//destAddress = inet_ntoa(ipHeader->ip_dst);
