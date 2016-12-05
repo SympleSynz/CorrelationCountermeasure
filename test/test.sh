@@ -50,7 +50,7 @@ while read line; do
 	#--bind-address=$VIRTUAL_SUBNET_PREFIX$counter
 	#echo --delete-after
 	#-qr -e robots=off -O $counter.file      dists/yakkety/
-	wget ""--bind-address=$VIRTUAL_SUBNET_PREFIX$counter --delete-after -qr -e robots=off -O $counter.file $(echo $line | tr -d "\n\r") "" &
+	wget ""--bind-address=$VIRTUAL_SUBNET_PREFIX$counter --delete-after -qr -e robots=off -O $counter.file $(echo $line | tr -d "\n\r") 1>$counter.out 2>$counter.err"" &
 	((counter++))
 done <$DISTRO_MIRROR_LIST
 
