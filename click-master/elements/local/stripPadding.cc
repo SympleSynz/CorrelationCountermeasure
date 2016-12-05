@@ -44,7 +44,7 @@ void stripPadding::push(int, Packet *p)
 	struct click_ip *ip_recv;
 	struct click_tcp *tcp_recv;
 	
-	char* dataArray = p->data();
+	const unsigned char* dataArray = p->data();
 	int removePaddingBytes;
 	memcpy(&removePaddingBytes, dataArray, sizeof(int));
 	click_chatter("removePaddingBytes: %d, dataArray: %s \n", removePaddingBytes, dataArray);
