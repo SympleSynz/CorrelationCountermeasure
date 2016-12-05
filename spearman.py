@@ -1,34 +1,15 @@
+from __future__ import division
 import os
 import copy
 from operator import itemgetter
 
 def getFlowRate(dataFile):
 	flowData = open(dataFile)
-	interval = 0
-	count = 0
-	flow = 0
-	flowRate = []
+	flowrate = []
 	for line in flowData:
 		element = line.split()
-		if count == 0:
-			interval = float(element[0])
-			flow = float(element[1])
-			count = 1
-		elif (float(element[0]) - interval < 100):
-			flow += float(element[1])
-			count += 1
-		elif (float(element[0]) - interval == 100):
-			flowRate.append(flow/100)
-			count = 0
-			interval = float(element[0])
-		else:
-			flowRate.append(flow/100)
-			interval = float(element[0])
-			flow = float(element[1])
-			count = 1
-	if count != 0:
-		flowRate.append(flow)
-	return flowRate
+		flowrate.append(element[0])
+	return flowrate
 
 def Rank(data):
 	sortData = copy.deepcopy(data)
@@ -69,9 +50,15 @@ def Spearman(srcFlowData,dstFlowData):
 	#print("Square diff",difference)
 #Calculate correlation
 	sumSquareDiff = sum(difference)
-	nSize = len(srcFlowData)
-	#print("Sum of square difference",sumSquareDiff)
-	correlation = 1 - ((6*sum(difference)/(nSize*(nSize**2-1))))
+	nSize = len(dstFlowData)
+	# print("Sum of square difference",sumSquareDiff)
+	# print("size",nSize)
+	# print("6*diff",(6*sumSquareDiff))
+	# print("size**2 - 1", (nSize**2 - 1))
+	# dividend = nSize*(nSize**2 - 1)
+	# print("size * above", dividend)
+	# print("now divide", (6*sumSquareDiff)/dividend)
+	correlation = 1 - ((6*sumSquareDiff/(nSize*(nSize**2-1))))
 	return correlation
 
 def eval(correlation):
@@ -89,14 +76,21 @@ def eval(correlation):
 def main():
 	results = open("resultsCorrelationBaseline.txt","a")
 	correlateData = []
-	for srcFilename in os.listdir("results/newResults/client/"):
-		srcFlowData = getFlowRate(("results/newResults/client/"+srcFilename))
+	# srcFilename = "results/average/20161205063812/client/112.124.140.210_19.19.19.2.out.average"
+	# dstFilename = "results/average/20161205063812/server/193.1.193.64_19.19.19.25.out.average"
+	# srcFlowData = getFlowRate(srcFilename)
+	# dstFlowData = getFlowRate(dstFilename)
+	# correlation = Spearman(srcFlowData,dstFlowData)
+	# print(correlation)
+	#count = 0
+	for srcFilename in os.listdir("results/average/20161205063812/client/"):
+		srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
 		spearmanData = []
-		for dstFilename in os.listdir("results/newResults/server/"):
-			dstFlowData = getFlowRate(("results/newResults/server/"+dstFilename))
+		for dstFilename in os.listdir("results/average/20161205063812/server/"):
+			dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
 			spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
 		# for dst in spearmanData:
-		# 	dstResults = "%s %s %f\n" %(srcFilename,dst[1],dst[0])
+		# 	dstResults = "\n%s %s %f\n" %(srcFilename,dst[1],dst[0])
 		# 	results.write(dstResults)
 		highestCorrelation = max(spearmanData,key=itemgetter(0))
 		evaluation = eval(highestCorrelation[0])
