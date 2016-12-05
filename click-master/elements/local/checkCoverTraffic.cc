@@ -22,7 +22,7 @@ checkCoverTraffic::checkCoverTraffic()
 {
 }
 
-coverTraffic::~checkCoverTraffic()
+checkCoverTraffic::~checkCoverTraffic()
 {
 }
 
@@ -35,7 +35,7 @@ coverTraffic::~checkCoverTraffic()
 void checkCoverTraffic::push(int, Packet *p)
 {
 	struct click_ip *ip;
-	ip = (struct click_ip *) q->ip_header();
+	ip = (struct click_ip *) p->ip_header();
 	if (ip->ip_ttl != 1)
 		output(0).push(p);
 	else
