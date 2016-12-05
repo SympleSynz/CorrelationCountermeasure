@@ -7,7 +7,7 @@ class coverTraffic : public Element
 { 
 	public:
 
-  		int _maxPad;
+  		int _prob;
 
 	public:
   		coverTraffic();

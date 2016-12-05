@@ -28,22 +28,25 @@ coverTraffic::~coverTraffic()
 
 int coverTraffic::configure(Vector<String> &conf, ErrorHandler *errh)
 {
-
-    int new_prob = 100;
-    if (Args(conf, this, errh).read_p("PROBABILITY", new_prob).complete() < 0)
-        return -1;
-    if(new_prob < 0 || new_prob > 100){
-    	return -1
-    }
-    _prob = new_prob;
-    return 0;
+	srand(time(NULL)); //seed randomizer.
+	int new_prob = 100;
+	if (Args(conf, this, errh).read_p("PROBABILITY", new_prob).complete() < 0)
+	{
+		return -1;
+	}
+	if(new_prob < 0 || new_prob > 100)
+	{
+		return -1
+	}
+	_prob = new_prob;
+	return 0;
 }
 
 
 void coverTraffic::push(int, Packet *p)
 {
 		int v1 = rand() % 100;
-	if (vi < _prob)
+	if (v1 < _prob)
 		output(0).push(p);
 	else
 	{
