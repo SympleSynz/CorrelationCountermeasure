@@ -50,15 +50,20 @@ void coverTraffic::push(int, Packet *p)
 		output(0).push(p);
 	else
 	{
-		struct click_ether *ether;
+/*		struct click_ether *ether;*/
 		struct click_ip *ip;
-		struct click_tcp *tcp;
+/*		struct click_tcp *tcp;
 		struct click_ether *ether_recv;
 		struct click_ip *ip_recv;
-		struct click_tcp *tcp_recv;
+		struct click_tcp *tcp_recv;*/
 
+		//This makes a clone of packet P as it come in. 
+		//Then we set the ttl of q to 1, send both traffics out.
+		Packet *q = p->clone();
+		ip = (struct click_ip *) q->ip_header();
+		ip->ip_ttl = 1;
 
-		WritablePacket *q = Packet::make(p->data(), sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length());
+		/*WritablePacket *q = Packet::make(p->data(), sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length());
 
 		ether = (struct click_ether *) q->data();
 		q->set_ether_header(ether);
@@ -105,7 +110,7 @@ void coverTraffic::push(int, Packet *p)
 		// now calculate tcp header cksum
 		unsigned csum = click_in_cksum((unsigned char *)tcp, sizeof(click_tcp));
 		tcp->th_sum = click_in_cksum_pseudohdr(csum, ip, sizeof(click_tcp));
-
+*/
 		// Packet q is ready
 
 		output(0).push(q);
