@@ -2881,7 +2881,7 @@
 155.210.4.101_19.19.19.34.out.average,155.210.4.101_19.19.19.34.out.average,0.9998853320592451,very-strong
 162.213.3.248_19.19.19.49.out.average,162.213.3.248_19.19.19.49.out.average,1.0,very-strong
 163.1.160.163_19.19.19.46.out.average,163.1.160.163_19.19.19.46.out.average,1.0,very-strong
-163.1.221.67_19.19.19.46.out.average,10.0.2.2_19.19.19.15.out.average,1.0,very-strong
+163.1.221.67_19.19.19.46.out.average,163.1.221.67_19.19.19.46.out.average,1.0,very-strong
 163.178.174.25_19.19.19.6.out.average,163.178.174.25_19.19.19.6.out.average,0.9999984444271603,very-strong
 185.87.121.190_19.19.19.41.out.average,185.87.121.190_19.19.19.41.out.average,0.9989308770097446,very-strong
 192.38.78.162_19.19.19.7.out.average,192.38.78.162_19.19.19.7.out.average,1.0,very-strong
@@ -2913,3 +2913,4 @@
 78.154.171.62_19.19.19.43.out.average,78.154.171.62_19.19.19.43.out.average,0.9985982066467405,very-strong
 78.96.7.8_19.19.19.30.out.average,78.96.7.8_19.19.19.30.out.average,1.0,very-strong
 95.173.191.11_19.19.19.42.out.average,95.173.191.11_19.19.19.42.out.average,0.9999871109678996,very-strong
+Accuracy rating: 100.000000%, 

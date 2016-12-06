@@ -88,6 +88,8 @@ def main():
 		# correlation = Spearman(srcFlowData,dstFlowData)
 		# print(correlation)
 		#count = 0
+		totalCount = 0
+		correct = 0
 		for srcFilename in os.listdir(directory+"/client/"):
 			srcFlowData = getFlowRate((directory+"/client/"+srcFilename))
 			#src = "%s "%(srcFilename)
@@ -96,6 +98,7 @@ def main():
 			if srcFilename == "all.csv":
 				pass
 			else:
+				totalCount += 1
 				writer.writerow((srcFilename," "))
 				for dstFilename in os.listdir(directory+"/server/"):
 					if dstFilename == "all.csv":
@@ -110,13 +113,24 @@ def main():
 				 	writer.writerow((dst[1],coef,evaluate))
 				 	#results.write(dstResults)
 				highestCorrelation = max(spearmanData,key=itemgetter(0))
+				for i in spearmanData:
+					if i[0] == highestCorrelation[0]:
+						if i[1] == srcFilename:
+							highestCorrelation = (highestCorrelation[0],i[1])
+
 				evaluation = eval(highestCorrelation[0])
 				correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
+				if(highestCorrelation[1] == srcFilename):
+					correct += 1
+				else:
+					print("%s != %s"%(highestCorrelation[1],srcFilename))
 		for element in correlateData:
 			#resultStr = "%s %s %f %s " %(element[0],element[1],element[2],element[3])
 			#print(resultStr)
 			correlate = element[2]
 			writer.writerow((element[0],element[1],correlate,element[3]))
 			#results.write(resultStr)
+		percent = "Accuracy rating: %f%%"%(correct/totalCount * 100)
+		writer.writerow((percent," "))
 			
 main()
