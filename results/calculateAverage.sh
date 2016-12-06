@@ -20,7 +20,7 @@ do
 	for f in *.out
 	do
 		echo "Processing $f"
-		../../../averageCalc $f 120
+		../../../averageCalc $f 300
 		rm $f
 	done
 	
