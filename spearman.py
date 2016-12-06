@@ -75,7 +75,9 @@ def eval(correlation):
 		return "very-strong"
 
 def main():
-	with open("resultsCorrelationBaseline.csv","wb") as results:
+	folder = "20161205182637"
+	directory = "results/average/"+folder+"/"
+	with open("resultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
 		writer = csv.writer(results)
 		correlateData = []
@@ -86,20 +88,20 @@ def main():
 		# correlation = Spearman(srcFlowData,dstFlowData)
 		# print(correlation)
 		#count = 0
-		for srcFilename in os.listdir("results/average/20161205063812/client/"):
-			srcFlowData = getFlowRate(("results/average/20161205063812/client/"+srcFilename))
+		for srcFilename in os.listdir(directory+"/client/"):
+			srcFlowData = getFlowRate((directory+"/client/"+srcFilename))
 			#src = "%s "%(srcFilename)
 			#results.write(src)
 			spearmanData = []
 			if srcFilename == "all.csv":
 				pass
 			else:
-				writer.writerow((srcFilename))
-				for dstFilename in os.listdir("results/average/20161205063812/server/"):
+				writer.writerow((srcFilename," "))
+				for dstFilename in os.listdir(directory+"/server/"):
 					if dstFilename == "all.csv":
 						pass
 					else:
-						dstFlowData = getFlowRate(("results/average/20161205063812/server/"+dstFilename))
+						dstFlowData = getFlowRate((directory+"/server/"+dstFilename))
 						spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
 				for dst in spearmanData:
 					#dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))
