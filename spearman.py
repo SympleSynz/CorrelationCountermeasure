@@ -75,7 +75,7 @@ def eval(correlation):
 		return "very-strong"
 
 def main():
-	folder = "20161205183553"
+	folder = "20161206020341"
 	directory = "results/average/"+folder+"/"
 	with open("resultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
