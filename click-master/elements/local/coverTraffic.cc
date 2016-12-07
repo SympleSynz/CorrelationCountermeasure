@@ -60,7 +60,7 @@ void CoverTraffic::push(int, Packet *p)
 	{
 		//This makes a clone of packet P as it come in. 
 		//Then we set the ttl of q to 1, send both traffics out.
-		packet *q = p->clone();
+		Packet *q = p->clone();
 		WritablePacket *r = q->uniqueify();
 		
 		ip = (struct click_ip *) r->ip_header();
