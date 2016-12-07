@@ -3,12 +3,18 @@
 #include <click/element.hh>
 CLICK_DECLS
 
+typedef struct _flow
+{
+	char address[16];
+	long flowTraffic;
+} Flow;
+
 class CoverTraffic : public Element 
 { 
 	public:
 
   		int _prob;
-		long* flowArray;
+		Flow* flowArray;
 
 		long min;
 		int minFlow;

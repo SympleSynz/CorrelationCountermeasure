@@ -43,7 +43,7 @@ int CoverTraffic::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	_prob = new_prob;
 	
-	flowArray = (long*)calloc(NUM_FLOWS, sizeof(long));
+	flowArray = (Flow*)calloc(NUM_FLOWS, sizeof(Flow));
 	
 	return 0;
 }
@@ -97,7 +97,16 @@ void CoverTraffic::push(int, Packet *p)
 	int v1 = rand() % 100;
 	
 	ip = (struct click_ip *) p->ip_header();
-	flowArray[int((ip->ip_dst.s_addr&0xFF000000)>>24)] += p->length();
+	
+	if ( flowArray[ int((ip->ip_dst.s_addr&0xFF000000)>>24) ].flowTraffic == 0)
+	{
+		sprintf(flowArray[ int((ip->ip_dst.s_addr&0xFF000000)>>24) ].address, "%d.%d.%d.%d",
+			int(ipHeader->ip_src.s_addr&0xFF), 
+			int((ipHeader->ip_src.s_addr&0xFF00)>>8),
+			int((ipHeader->ip_src.s_addr&0xFF0000)>>16),
+			int((ipHeader->ip_src.s_addr&0xFF000000)>>24));
+	}
+	flowArray[int((ip->ip_dst.s_addr&0xFF000000)>>24)].flowTraffic += p->length();
 	
 	if (v1 < _prob)
 	{
@@ -109,7 +118,7 @@ void CoverTraffic::push(int, Packet *p)
 
 		WritablePacket *q = Packet::make(p->data(), sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length());
 
-		ether = (struct click_ether *) q->data();
+		ether = (struct click_ether *) p->data();
 		q->set_ether_header(ether);
 		ip = (struct click_ip *) q->ip_header();
 		q->set_ip_header(ip, sizeof(click_ip));
@@ -124,7 +133,6 @@ void CoverTraffic::push(int, Packet *p)
 		ether->ether_type = ether_recv->ether_type;
 		memcpy(ether->ether_dhost, ether_recv->ether_shost, 6);
 		memcpy(ether->ether_shost, ether_recv->ether_dhost, 6);
-
 
 		// IP fields
 		ip->ip_v = 4;
@@ -160,18 +168,19 @@ void CoverTraffic::push(int, Packet *p)
 		
 		for (int i = 2; i < NUM_FLOWS; i++)
 		{
-			if (flowArray[i] < minFlow)
+			if ((flowArray[i].flowTraffic > 0) && (flowArray[i].flowTraffic < minFlow))
 			{
-				min = flowArray[i];
+				min = flowArray[i].flowTraffic;
 				minFlow = i;
 			}
 		}
 		
 		sprintf(minAddress, "19.19.19.%d", minFlow);
-	
-		inet_aton(minAddress, &(ip->ip_dst));
 		
-		flowArray[minFlow] += q->length();
+		inet_aton(minAddress, &(ip->ip_dst));
+		inet_aton(flowArray[minFlow].address, &(ip->ip_src) );
+		
+		flowArray[minFlow].flowTraffic += q->length();
 
 		// Packet q is ready
 
