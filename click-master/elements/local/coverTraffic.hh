@@ -23,6 +23,7 @@ class CoverTraffic : public Element
 		char minAddress[16];
 
 		struct click_ip *ip;
+		struct click_ip *ip_recv;
 
 	public:
   		CoverTraffic();
