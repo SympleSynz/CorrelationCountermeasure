@@ -3,6 +3,7 @@ import os
 import copy
 import csv
 import numpy
+import sys
 from operator import itemgetter
 
 def getFlowRate(dataFile):
@@ -31,7 +32,7 @@ def eval(correlation):
 
 def main():
 	folder = str(sys.argv[1])
-	folder = "20161207153702"
+	#folder = "20161207153702"
 	directory = "results/average/"+folder+"/"
 	with open("pearsonResultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
