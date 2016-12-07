@@ -37,9 +37,15 @@ void checkCoverTraffic::push(int, Packet *p)
 	struct click_ip *ip;
 	ip = (struct click_ip *) p->ip_header();
 	if (ip->ip_ttl != 1)
+	{
 		output(0).push(p);
+		click_chatter("Push Packet: ttl=%d", ip->ip_ttl);
+	}
 	else
+	{
 		p->kill();  
+		click_chatter("Kill Packet: ttl=%d", ip->ip_ttl);
+	}
 }
 
 
