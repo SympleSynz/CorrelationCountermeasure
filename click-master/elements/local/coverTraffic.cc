@@ -60,8 +60,10 @@ void CoverTraffic::push(int, Packet *p)
 	{
 		//This makes a clone of packet P as it come in. 
 		//Then we set the ttl of q to 1, send both traffics out.
-		WritablePacket *q = p->expensive_uniqueify(0, 0, true);
-		ip = (struct click_ip *) q->ip_header();
+		packet *q = p->clone();
+		WritablePacket *r = q->uniqueify();
+		
+		ip = (struct click_ip *) r->ip_header();
 		ip->ip_ttl = 1;
 		
 		min = flowArray[1];
@@ -80,9 +82,9 @@ void CoverTraffic::push(int, Packet *p)
 	
 		inet_aton(minAddress, &(ip->ip_dst));
 		
-		flowArray[minFlow] += q->length();
+		flowArray[minFlow] += r->length();
 
-		output(0).push(q);
+		output(0).push(r);
 	}
 	
 	click_chatter("Got to output(0).push(p)");
