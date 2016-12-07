@@ -15,6 +15,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <stdlib.h>
+#include <arpa/inet.h>
 
 #define NUM_FLOWS 51
 
@@ -42,7 +43,7 @@ int coverTraffic2::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	_prob = new_prob;
 	
-	flowArray = calloc(NUM_FLOWS, sizeof(long));
+	flowArray = (long*)calloc(NUM_FLOWS, sizeof(long));
 	
 	return 0;
 }
@@ -52,7 +53,8 @@ void coverTraffic2::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
-	flowArray[int((ipHeader->ip_dst.s_addr&0xFF000000)>>24)] += p->length();
+	ip = (struct click_ip *) p->ip_header();
+	flowArray[int((ip->ip_dst.s_addr&0xFF000000)>>24)] += p->length();
 	
 	if (v1 < _prob)
 	{
@@ -76,7 +78,7 @@ void coverTraffic2::push(int, Packet *p)
 	
 		sprintf(minAddress, "19.19.19.%d", minFlow);
 	
-		inet_aton(minAddress, &(ip->ip_dst.sin_addr));
+		inet_aton(minAddress, &(ip->ip_dst));
 		
 		flowArray[minFlow] += q->length();
 

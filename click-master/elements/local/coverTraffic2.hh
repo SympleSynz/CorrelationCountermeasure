@@ -12,7 +12,7 @@ class coverTraffic2 : public Element
 
 		long min;
 		int minFlow;
-		char minAdress[16];
+		char minAddress[16];
 
 		struct click_ip *ip;
 
