@@ -135,7 +135,7 @@
 /* #undef HAVE_LINUXMODULE_2_6 */
 
 /* Define if the linuxmodule driver might run multiple threads. */
-/* #undef HAVE_LINUXMODULE_MULTITHREAD */
+#define HAVE_LINUXMODULE_MULTITHREAD 1
 
 /* Define if you have the net_enable_timestamp function. */
 /* #undef HAVE_NET_ENABLE_TIMESTAMP */

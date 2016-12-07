@@ -4,13 +4,13 @@
 #define CLICK_PATHVARS_H
 
 /* Install directory for Click executables. */
-#define CLICK_BINDIR "/home/mike/Downloads/click-master/installdir/bin"
+#define CLICK_BINDIR "/home/mike/project/CorrelationCountermeasure/click-master/installdir/bin"
 
 /* Install directory for Click libraries and packages. */
-#define CLICK_LIBDIR "/home/mike/Downloads/click-master/installdir/lib"
+#define CLICK_LIBDIR "/home/mike/project/CorrelationCountermeasure/click-master/installdir/lib"
 
 /* Install directory for Click shared data. */
-#define CLICK_DATADIR "/home/mike/Downloads/click-master/installdir/share/click"
+#define CLICK_DATADIR "/home/mike/project/CorrelationCountermeasure/click-master/installdir/share/click"
 
 /* FreeBSD kernel include directory. */
 #define FREEBSD_INCLUDEDIR "/usr/include"

@@ -37,7 +37,7 @@
 
 /* Define to 1 if you have the declaration
    of 'pcap_setnonblock', and to 0 if you don't. */
-#define HAVE_DECL_PCAP_SETNONBLOCK 1
+/* #undef HAVE_DECL_PCAP_SETNONBLOCK */
 
 /* Define if you have the <dlfcn.h> header file. */
 #define HAVE_DLFCN_H 1
@@ -127,22 +127,22 @@
 #define HAVE_NEW_HDR 1
 
 /* Define if you have -lpcap and pcap.h. */
-#define HAVE_PCAP 1
+/* #undef HAVE_PCAP */
 
 /* Define if you have the pcap_inject function. */
-#define HAVE_PCAP_INJECT 1
+/* #undef HAVE_PCAP_INJECT */
 
 /* Define if you have the pcap_sendpacket function. */
-#define HAVE_PCAP_SENDPACKET 1
+/* #undef HAVE_PCAP_SENDPACKET */
 
 /* Define if you have the pcap_setdirection function. */
-#define HAVE_PCAP_SETDIRECTION 1
+/* #undef HAVE_PCAP_SETDIRECTION */
 
 /* Define if you have the pcap_setnonblock function. */
-#define HAVE_PCAP_SETNONBLOCK 1
+/* #undef HAVE_PCAP_SETNONBLOCK */
 
 /* Define if you have the pcap_set_immediate_mode function. */
-#define HAVE_PCAP_SET_IMMEDIATE_MODE 1
+/* #undef HAVE_PCAP_SET_IMMEDIATE_MODE */
 
 /* Define if you have -lproper and prop.h, and proper operations should be
    preferred to their non-proper counterparts. */

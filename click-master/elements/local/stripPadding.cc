@@ -47,7 +47,7 @@ void stripPadding::push(int, Packet *p)
 	const unsigned char* dataArray = p->data();
 	int removePaddingBytes;
 	memcpy(&removePaddingBytes, dataArray, sizeof(int));
-	click_chatter("removePaddingBytes: %d, dataArray: %s \n", removePaddingBytes, dataArray);
+	click_chatter("removePaddingBytes: %d, dataArray: %s  test\n", removePaddingBytes, dataArray);
 
 	dataArray = dataArray + removePaddingBytes;
 	//This creates an empty packet that we can create

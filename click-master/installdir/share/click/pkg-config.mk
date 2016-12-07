@@ -31,7 +31,7 @@ CLICKLINUX_SRCDIR = NONE
 CLICKLINUX_MAKEARGS = 
 CLICKLINUX_FIXINCLUDES_PROGRAM = 
 
-CLICKCPPFLAGS = 
+CLICKCPPFLAGS =  -D__MTCLICK__
 CLICKCFLAGS = -g -O2 -W -Wall
 CLICKKERNEL_CFLAGS =  -O2 -Wno-undef
 CLICKCXXFLAGS = -g -O2 -W -Wall
@@ -43,7 +43,7 @@ CLICKINCLUDES = -I$(clickbuild_includedir) -I$(clickbuild_srcdir)
 CLICKLDFLAGS = 
 CLICKLDMODULEFLAGS = -shared
 
-CLICKAUTOCONF = autoconf
+CLICKAUTOCONF = $(conf_auxdir)/missing autoconf
 CLICKGMAKE = make
 CLICKINSTALL = /usr/bin/install -c
 
