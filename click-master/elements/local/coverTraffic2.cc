@@ -90,5 +90,5 @@ void coverTraffic2::push(int, Packet *p)
 
 
 CLICK_ENDDECLS
-EXPORT_ELEMENT(coverTraffic2)
-ELEMENT_MT_SAFE(coverTraffic2)
+EXPORT_ELEMENT(CoverTrafficAgain)
+ELEMENT_MT_SAFE(CoverTrafficAgain)
