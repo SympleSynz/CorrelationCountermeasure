@@ -87,7 +87,7 @@ void CoverTraffic::push(int, Packet *p)
 		output(0).push(r);
 	}
 	
-	click_chatter("Got to output(0).push(p)");
+	//click_chatter("Got to output(0).push(p)");
 
 	output(0).push(p);
 }
