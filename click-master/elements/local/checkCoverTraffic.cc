@@ -38,13 +38,13 @@ void checkCoverTraffic::push(int, Packet *p)
 	ip = (struct click_ip *) p->ip_header();
 	if (ip->ip_ttl != 1)
 	{
+		click_chatter("Push Packet: ttl=%d", ip->ip_ttl);
 		output(0).push(p);
-		//click_chatter("Push Packet: ttl=%d", ip->ip_ttl);
 	}
 	else
 	{
+		click_chatter("Kill Packet: ttl=%d", ip->ip_ttl);
 		p->kill();  
-		//click_chatter("Kill Packet: ttl=%d", ip->ip_ttl);
 	}
 }
 
