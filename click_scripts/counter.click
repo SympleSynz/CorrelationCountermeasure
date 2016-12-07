@@ -6,7 +6,7 @@ serverFD::FromDevice($SERVER_SIDE, SNIFFER false, PROMISC true );
 clientCor::Correlator(client);
 serverCor::Correlator(server);
 
-preCounter::coverTraffic(25);
+preCounter::CoverTraffic(50);
 postCounter::checkCoverTraffic();
 
 clientQueue::Queue(100);
@@ -24,9 +24,9 @@ serverFD -> ipClassify;
 ipClassify[0] -> CheckIPHeader(14) -> tcpClassify;
 ipClassify[1] -> clientQueue;
 
-tcpClassify[0] -> preCounter;
+tcpClassify[0] -> serverCor;
 tcpClassify[1] -> clientQueue;
 
-preCounter -> serverCor -> postCounter -> clientCor -> clientQueue;
+serverCor -> preCounter -> clientCor -> postCounter -> clientQueue;
 
 clientQueue -> ToDevice($CLIENT_SIDE);
