@@ -119,7 +119,7 @@ void CoverTraffic::push(int, Packet *p)
 
 		WritablePacket *q = Packet::make(p->data(), sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length());
 
-		ether = (struct click_ether *) p->data();
+		ether = (struct click_ether *) q->data();
 		q->set_ether_header(ether);
 		ip = (struct click_ip *) q->ip_header();
 		q->set_ip_header(ip, sizeof(click_ip));
