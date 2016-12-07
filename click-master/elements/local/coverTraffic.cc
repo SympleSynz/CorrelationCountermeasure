@@ -96,9 +96,9 @@ void CoverTraffic::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
-	thisFlow = int((ip->ip_dst.s_addr&0xFF000000)>>24);
-	
 	ip = (struct click_ip *) p->ip_header();
+	
+	thisFlow = int((ip->ip_dst.s_addr&0xFF000000)>>24);
 	
 	if ( flowArray[ thisFlow ].flowTraffic == 0)
 	{
