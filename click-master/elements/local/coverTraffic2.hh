@@ -1,9 +1,9 @@
-#ifndef CLICK_COVERTRAFFIC2_HH
-#define CLICK_COVERTRAFFIC2_HH
+#ifndef CLICK_COVERTRAFFICAGAIN_HH
+#define CLICK_COVERTRAFFICAGAIN_HH
 #include <click/element.hh>
 CLICK_DECLS
 
-class coverTraffic2 : public Element 
+class CoverTrafficAgain : public Element 
 { 
 	public:
 
@@ -17,8 +17,8 @@ class coverTraffic2 : public Element
 		struct click_ip *ip;
 
 	public:
-  		coverTraffic2();
-  		~coverTraffic2();
+  		CoverTrafficAgain();
+  		~CoverTrafficAgain();
 
   		const char *class_name() const	{ return "coverTraffic"; }
   		const char *port_count() const	{ return "1/1"; }

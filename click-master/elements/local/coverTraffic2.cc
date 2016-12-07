@@ -21,15 +21,15 @@
 
 CLICK_DECLS
 
-coverTraffic2::coverTraffic2(): _prob(0)
+CoverTrafficAgain::CoverTrafficAgain(): _prob(0)
 {
 }
 
-coverTraffic2::~coverTraffic2()
+CoverTrafficAgain::~CoverTrafficAgain()
 {
 }
 
-int coverTraffic2::configure(Vector<String> &conf, ErrorHandler *errh)
+int CoverTrafficAgain::configure(Vector<String> &conf, ErrorHandler *errh)
 {
 	srand(time(NULL)); //seed randomizer.
 	int new_prob = 100;
@@ -49,7 +49,7 @@ int coverTraffic2::configure(Vector<String> &conf, ErrorHandler *errh)
 }
 
 
-void coverTraffic2::push(int, Packet *p)
+void CoverTrafficAgain::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
