@@ -2,6 +2,7 @@ from __future__ import division
 import os
 import copy
 import csv
+import numpy
 from operator import itemgetter
 
 def getFlowRate(dataFile):
@@ -9,58 +10,12 @@ def getFlowRate(dataFile):
 	flowrate = []
 	for line in flowData:
 		element = line.split()
-		flowrate.append(element[0])
+		flowrate.append(float(element[0]))
 	return flowrate
 
-def Rank(data):
-	sortData = copy.deepcopy(data)
-	sortData.sort()
-	rankData = {}
-	for i in range(len(sortData)):
-		rankData[sortData[i]] = i+1
-	ranking = []
-	for i in range(len(data)):
-		ranking.append(rankData[data[i]])
-	return ranking
-
-def Spearman(srcFlowData,dstFlowData):
-	srcLen = len(srcFlowData)
-	dstLen = len(dstFlowData)
-	if srcLen < dstLen:
-		destFlowData = dstFlowData[:srcLen]
-	elif dstLen < srcLen:
-		srcFlowData = srcFlowData[:dstLen]
-#Independent Variable: srcFlowData
-	#print("srcFlowData", srcFlowData)
-#Dependent Variable: destFlowData
-	#print("dstFlowData", dstFlowData)
-#Rank Dependent Variable
-	srcRank = Rank(srcFlowData)
-	#print("srcRank",srcRank)
-#Rank Independent Variable
-	dstRank = Rank(dstFlowData)
-	#print("destRank",dstRank)
-#Difference in Rank
-	difference = []
-	for i in range(len(srcRank)):
-		difference.append(srcRank[i] - dstRank[i])
-	#print("Rank diff",difference)
-#Square Difference
-	for i in range(len(difference)):
-		difference[i] = difference[i]**2
-	#print("Square diff",difference)
-#Calculate correlation
-	sumSquareDiff = sum(difference)
-	nSize = len(dstFlowData)
-	# print("Sum of square difference",sumSquareDiff)
-	# print("size",nSize)
-	# print("6*diff",(6*sumSquareDiff))
-	# print("size**2 - 1", (nSize**2 - 1))
-	# dividend = nSize*(nSize**2 - 1)
-	# print("size * above", dividend)
-	# print("now divide", (6*sumSquareDiff)/dividend)
-	correlation = 1 - ((6*sumSquareDiff/(nSize*(nSize**2-1))))
-	return correlation
+def Pearson(srcFlowData,dstFlowData):
+	correlation = numpy.corrcoef(srcFlowData,dstFlowData)
+	return correlation[0][1]
 
 def eval(correlation):
 	if abs(correlation) > 0.00 and abs(correlation) <= 0.19:
@@ -75,22 +30,23 @@ def eval(correlation):
 		return "very-strong"
 
 def main():
+	folder = str(sys.argv[1])
 	folder = "20161207153702"
 	directory = "results/average/"+folder+"/"
-	with open("resultsCorrelation_"+folder+".csv","wb") as results:
+	with open("pearsonResultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
 		writer = csv.writer(results)
 		correlateData = []
 		totalCount = 0
 		correct = 0
 		for srcFilename in os.listdir(directory+"/server/"):
-			srcFlowData = getFlowRate((directory+"/server/"+srcFilename))
 			#src = "%s "%(srcFilename)
 			#results.write(src)
-			spearmanData = []
+			pearsonData = []
 			if srcFilename == "all.csv" or srcFilename.startswith("10.0"):
 				pass
 			else:
+				srcFlowData = getFlowRate((directory+"/server/"+srcFilename))
 				totalCount += 1
 				writer.writerow((srcFilename," "))
 				for dstFilename in os.listdir(directory+"/client/"):
@@ -98,15 +54,15 @@ def main():
 						pass
 					else:
 						dstFlowData = getFlowRate((directory+"/client/"+dstFilename))
-						spearmanData.append((Spearman(srcFlowData, dstFlowData),dstFilename))
-				for dst in spearmanData:
+						pearsonData.append((Pearson(srcFlowData, dstFlowData),dstFilename))
+				for dst in pearsonData:
 					#dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))
 					coef = "%f"%(dst[0])
 					evaluate = eval(dst[0])
 				 	writer.writerow((dst[1],coef,evaluate))
 				 	#results.write(dstResults)
-				highestCorrelation = max(spearmanData,key=itemgetter(0))
-				for i in spearmanData:
+				highestCorrelation = max(pearsonData,key=itemgetter(0))
+				for i in pearsonData:
 					if i[0] == highestCorrelation[0]:
 						if i[1] == srcFilename:
 							highestCorrelation = (highestCorrelation[0],i[1])
