@@ -2,7 +2,7 @@
  */
 
 #include <click/config.h>
-#include "CoverTrafficAgain.hh"
+#include "coverTraffic2.hh"
 #include <clicknet/ip.h>
 #include <clicknet/tcp.h>
 #include <clicknet/ether.h>
