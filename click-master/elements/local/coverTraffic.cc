@@ -67,7 +67,7 @@ void CoverTraffic::push(int, Packet *p)
 		min = flowArray[1];
 		minFlow = 1;
 		
-		for (int i = 2; i <= NUM_FLOWS; i++)
+		for (int i = 2; i < NUM_FLOWS; i++)
 		{
 			if (flowArray[i] < minFlow)
 			{
@@ -84,6 +84,8 @@ void CoverTraffic::push(int, Packet *p)
 
 		output(0).push(q);
 	}
+	
+	click_chatter("Got to output(0).push(p)");
 
 	output(0).push(p);
 }
