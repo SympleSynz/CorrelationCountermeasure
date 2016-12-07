@@ -19,7 +19,7 @@ do
 	
 	for f in *.out
 	do
-		echo "Processing $f"
+		#echo "Processing $f"
 		../../../averageCalc $f 300
 		rm $f
 	done
