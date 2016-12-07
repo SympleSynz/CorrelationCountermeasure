@@ -75,7 +75,7 @@ void packetPadding::push(int, Packet *p)
 	}
 	
 	//This creates an empty packet that we can create
-	WritablePacket *q = Packet::make(padding, sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() + paddingBytes);
+	WritablePacket *q = Packet::make(stringp, sizeof(*ether) + sizeof(*ip) + sizeof(*tcp) + p->length() + paddingBytes);
 	click_chatter("Make Packet: %d, %d, %d, %d", q->length(), sizeof(*ether), sizeof(*ip),  sizeof(*tcp));
 	if (q == 0) 
 	{
