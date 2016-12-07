@@ -96,17 +96,17 @@ void CoverTraffic::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
-	ip = (struct click_ip *) p->ip_header();
+	ip_recv = (struct click_ip *) p->ip_header();
 	
-	thisFlow = int((ip->ip_dst.s_addr&0xFF000000)>>24);
+	thisFlow = int((ip_recv->ip_dst.s_addr&0xFF000000)>>24);
 	
-	if ( flowArray[ thisFlow ].flowTraffic == 0)
+	if ( flowArray[ thisFlow ].flowTraffic == 0 )
 	{
 		sprintf(flowArray[ thisFlow ].address, "%d.%d.%d.%d",
-			int(ip->ip_src.s_addr&0xFF), 
-			int((ip->ip_src.s_addr&0xFF00)>>8),
-			int((ip->ip_src.s_addr&0xFF0000)>>16),
-			int((ip->ip_src.s_addr&0xFF000000)>>24));
+			int(ip_recv->ip_src.s_addr&0xFF), 
+			int((ip_recv->ip_src.s_addr&0xFF00)>>8),
+			int((ip_recv->ip_src.s_addr&0xFF0000)>>16),
+			int((ip_recv->ip_src.s_addr&0xFF000000)>>24));
 	}
 	flowArray[thisFlow].flowTraffic += p->length();
 	
@@ -128,7 +128,6 @@ void CoverTraffic::push(int, Packet *p)
 		//q->set_ip_header(ip, sizeof(click_ip));
 		
 		ether_recv = (struct click_ether *) p->ether_header();
-		ip_recv = (struct click_ip *) p->ip_header();
 		tcp_recv = (struct click_tcp *) p->tcp_header();  //(ip_recv + 1);
 
 		// ETHER fields
@@ -148,22 +147,6 @@ void CoverTraffic::push(int, Packet *p)
 		ip->ip_sum = 0;
 		memcpy((void *) &(ip->ip_src), (void *) &(ip_recv->ip_src), sizeof(ip_recv->ip_src));
 		memcpy((void *) &(ip->ip_dst), (void *) &(ip_recv->ip_dst), sizeof(ip_recv->ip_dst));
-		ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
-
-		// TCP fields
-		memcpy((void *) &(tcp->th_sport), (void *) &(tcp_recv->th_sport), sizeof(tcp_recv->th_sport));
-		memcpy((void *) &(tcp->th_dport), (void *) &(tcp_recv->th_dport), sizeof(tcp_recv->th_dport));
-		tcp->th_seq = tcp_recv->th_seq;
-		tcp->th_ack = tcp_recv->th_ack;
-		tcp->th_off = 5;
-		tcp->th_flags = 0x4; // RST bit set
-		tcp->th_win = htons(32120);
-		tcp->th_sum = htons(0);
-		tcp->th_urp = htons(0);
-
-		// now calculate tcp header cksum
-		unsigned csum = click_in_cksum((unsigned char *)tcp, sizeof(click_tcp));
-		tcp->th_sum = click_in_cksum_pseudohdr(csum, ip, sizeof(click_tcp));
 		
 		min = flowArray[thisFlow].flowTraffic;
 		minFlow = thisFlow;
@@ -183,6 +166,24 @@ void CoverTraffic::push(int, Packet *p)
 		inet_aton(flowArray[minFlow].address, &(ip->ip_src) );
 		
 		flowArray[minFlow].flowTraffic += q->length();
+		
+		
+		ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
+
+		// TCP fields
+		memcpy((void *) &(tcp->th_sport), (void *) &(tcp_recv->th_sport), sizeof(tcp_recv->th_sport));
+		memcpy((void *) &(tcp->th_dport), (void *) &(tcp_recv->th_dport), sizeof(tcp_recv->th_dport));
+		tcp->th_seq = tcp_recv->th_seq;
+		tcp->th_ack = tcp_recv->th_ack;
+		tcp->th_off = 5;
+		tcp->th_flags = 0x4; // RST bit set
+		tcp->th_win = htons(32120);
+		tcp->th_sum = htons(0);
+		tcp->th_urp = htons(0);
+
+		// now calculate tcp header cksum
+		unsigned csum = click_in_cksum((unsigned char *)tcp, sizeof(click_tcp));
+		tcp->th_sum = click_in_cksum_pseudohdr(csum, ip, sizeof(click_tcp));
 
 		// Packet q is ready
 
