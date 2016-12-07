@@ -20,7 +20,7 @@ class CoverTraffic : public Element
   		CoverTraffic();
   		~CoverTraffic();
 
-  		const char *class_name() const	{ return "coverTraffic"; }
+  		const char *class_name() const	{ return "CoverTraffic"; }
   		const char *port_count() const	{ return "1/1"; }
   		const char *processing() const  { return PUSH; }
 
