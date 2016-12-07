@@ -92,7 +92,7 @@ int CoverTraffic::configure(Vector<String> &conf, ErrorHandler *errh)
 	output(0).push(p);
 }*/
 
-void coverTraffic::push(int, Packet *p)
+void CoverTraffic::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
@@ -171,10 +171,7 @@ void coverTraffic::push(int, Packet *p)
 	
 		inet_aton(minAddress, &(ip->ip_dst));
 		
-		flowArray[minFlow] += r->length();
-
-		output(0).push(r);
-		
+		flowArray[minFlow] += q->length();
 
 		// Packet q is ready
 
