@@ -10,6 +10,12 @@ class coverTraffic2 : public Element
   		int _prob;
 		long* flowArray;
 
+		long min;
+		int minFlow;
+		char minAdress[16];
+
+		struct click_ip *ip;
+
 	public:
   		coverTraffic2();
   		~coverTraffic2();
