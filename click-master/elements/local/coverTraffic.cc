@@ -96,17 +96,19 @@ void CoverTraffic::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
 	
+	thisFlow = int((ip->ip_dst.s_addr&0xFF000000)>>24);
+	
 	ip = (struct click_ip *) p->ip_header();
 	
-	if ( flowArray[ int((ip->ip_dst.s_addr&0xFF000000)>>24) ].flowTraffic == 0)
+	if ( flowArray[ thisFlow ].flowTraffic == 0)
 	{
-		sprintf(flowArray[ int((ip->ip_dst.s_addr&0xFF000000)>>24) ].address, "%d.%d.%d.%d",
-			int(ipHeader->ip_src.s_addr&0xFF), 
-			int((ipHeader->ip_src.s_addr&0xFF00)>>8),
-			int((ipHeader->ip_src.s_addr&0xFF0000)>>16),
-			int((ipHeader->ip_src.s_addr&0xFF000000)>>24));
+		sprintf(flowArray[ thisFlow ].address, "%d.%d.%d.%d",
+			int(ip->ip_src.s_addr&0xFF), 
+			int((ip->ip_src.s_addr&0xFF00)>>8),
+			int((ip->ip_src.s_addr&0xFF0000)>>16),
+			int((ip->ip_src.s_addr&0xFF000000)>>24));
 	}
-	flowArray[int((ip->ip_dst.s_addr&0xFF000000)>>24)].flowTraffic += p->length();
+	flowArray[thisFlow].flowTraffic += p->length();
 	
 	if (v1 < _prob)
 	{
@@ -163,10 +165,10 @@ void CoverTraffic::push(int, Packet *p)
 		unsigned csum = click_in_cksum((unsigned char *)tcp, sizeof(click_tcp));
 		tcp->th_sum = click_in_cksum_pseudohdr(csum, ip, sizeof(click_tcp));
 		
-		min = flowArray[1];
-		minFlow = 1;
+		min = flowArray[thisFlow].flowTraffic;
+		minFlow = thisFlow;
 		
-		for (int i = 2; i < NUM_FLOWS; i++)
+		for (int i = 1; i < NUM_FLOWS; i++)
 		{
 			if ((flowArray[i].flowTraffic > 0) && (flowArray[i].flowTraffic < minFlow))
 			{

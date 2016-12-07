@@ -16,6 +16,8 @@ class CoverTraffic : public Element
   		int _prob;
 		Flow* flowArray;
 
+		int thisFlow;
+
 		long min;
 		int minFlow;
 		char minAddress[16];
