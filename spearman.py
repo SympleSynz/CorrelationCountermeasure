@@ -75,7 +75,7 @@ def eval(correlation):
 		return "very-strong"
 
 def main():
-	folder = "20161206223730"
+	folder = "20161206230156"
 	directory = "results/average/"+folder+"/"
 	with open("resultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
@@ -122,8 +122,8 @@ def main():
 				correlateData.append((srcFilename, highestCorrelation[1], highestCorrelation[0], evaluation))
 				if(highestCorrelation[1] == srcFilename):
 					correct += 1
-				else:
-					print("%s != %s"%(highestCorrelation[1],srcFilename))
+				#else:
+				#	print("%s != %s"%(highestCorrelation[1],srcFilename))
 		for element in correlateData:
 			#resultStr = "%s %s %f %s " %(element[0],element[1],element[2],element[3])
 			#print(resultStr)
