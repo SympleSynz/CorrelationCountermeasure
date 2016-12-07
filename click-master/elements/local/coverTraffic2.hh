@@ -1,19 +1,20 @@
-#ifndef CLICK_STRIPPADDING_HH
-#define CLICK_STRIPTPADDING_HH
+#ifndef CLICK_COVERTRAFFIC2_HH
+#define CLICK_COVERTRAFFIC2_HH
 #include <click/element.hh>
 CLICK_DECLS
 
-class stripPadding : public Element 
+class coverTraffic2 : public Element 
 { 
 	public:
 
   		int _prob;
+		long* flowArray;
 
 	public:
-  		stripPadding();
-  		~stripPadding();
+  		coverTraffic2();
+  		~coverTraffic2();
 
-  		const char *class_name() const	{ return "stripPadding"; }
+  		const char *class_name() const	{ return "coverTraffic"; }
   		const char *port_count() const	{ return "1/1"; }
   		const char *processing() const  { return PUSH; }
 
