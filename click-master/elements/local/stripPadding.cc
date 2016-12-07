@@ -86,13 +86,13 @@ void stripPadding::push(int, Packet *p)
 	ip->ip_ttl = 255;
 	ip->ip_p = IP_PROTO_TCP;
 	ip->ip_sum = 0;
-	memcpy((void *) &(ip->ip_src), (void *) &(ip_recv->ip_dst), sizeof(ip_recv->ip_dst));
-	memcpy((void *) &(ip->ip_dst), (void *) &(ip_recv->ip_src), sizeof(ip_recv->ip_src));
+	memcpy((void *) &(ip->ip_src), (void *) &(ip_recv->ip_src), sizeof(ip_recv->ip_src));
+	memcpy((void *) &(ip->ip_dst), (void *) &(ip_recv->ip_dst), sizeof(ip_recv->ip_dst));
 	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
 
 	// TCP fields
-	memcpy((void *) &(tcp->th_sport), (void *) &(tcp_recv->th_dport), sizeof(tcp_recv->th_dport));
-	memcpy((void *) &(tcp->th_dport), (void *) &(tcp_recv->th_sport), sizeof(tcp_recv->th_sport));
+	memcpy((void *) &(tcp->th_sport), (void *) &(tcp_recv->th_sport), sizeof(tcp_recv->th_sport));
+	memcpy((void *) &(tcp->th_dport), (void *) &(tcp_recv->th_dport), sizeof(tcp_recv->th_dport));
 	tcp->th_seq = tcp_recv->th_seq;
 	tcp->th_ack = tcp_recv->th_ack;
 	tcp->th_off = 5;
