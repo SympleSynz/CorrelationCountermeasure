@@ -140,9 +140,9 @@ void CoverSpike::push(int, Packet *p)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				if (flowArray[bigSpike[i]].active)
+				if (flowArray[ littleSpike[i]].active)
 				{
-					send_cover( &(flowArray[bigSpike[i]]), bigSpike[i], p );
+					send_cover( littleSpike[i], p );
 				}
 			}
 		}
@@ -153,7 +153,7 @@ void CoverSpike::push(int, Packet *p)
 }
 
 
-void CoverSpike::send_cover(Flow2* targetFlow, int flowID, Packet* p)
+void CoverSpike::send_cover( int flowID, Packet* p)
 {
 	struct click_ether *ether;
 	struct click_ip *ip;
@@ -175,6 +175,7 @@ void CoverSpike::send_cover(Flow2* targetFlow, int flowID, Packet* p)
 	
 	ether_recv = (struct click_ether *) p->ether_header();
 	tcp_recv = (struct click_tcp *) p->tcp_header();  //(ip_recv + 1);
+	ip_recv = (struct click_ip *) p->ip_header();
 
 	// ETHER fields
 	ether->ether_type = ether_recv->ether_type;
@@ -197,7 +198,7 @@ void CoverSpike::send_cover(Flow2* targetFlow, int flowID, Packet* p)
 	sprintf(address, "19.19.19.%d", flowID);
 	
 	inet_aton(address, &(ip->ip_dst));
-	inet_aton(targetFlow->address, &(ip->ip_src) );
+	inet_aton( flowArray[flowID].address, &(ip->ip_src) );
 	
 	
 	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
