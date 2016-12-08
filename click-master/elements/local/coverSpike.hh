@@ -4,7 +4,7 @@
 CLICK_DECLS
 
 #define NUM_FLOWS 51
-#define NUM_SPIKE 5
+#define NUM_SPIKE 8
 
 typedef struct _flow2
 {

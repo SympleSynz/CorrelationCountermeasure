@@ -116,7 +116,7 @@ void CoverSpike::push(int, Packet *p)
 		flowArray[thisFlow].active = 1;
 	}
 	
-	if ((rand() % 1000) == 1) //change big spikes
+	if ((rand() % 500) == 1) //change big spikes
 	{
 		for (int i = 0; i < NUM_SPIKE; i++)
 		{
@@ -124,7 +124,7 @@ void CoverSpike::push(int, Packet *p)
 		}
 	}
 	
-	if ((rand() % 500) == 2) //change mid spikes
+	if ((rand() % 200) == 2) //change mid spikes
 	{
 		for (int i = 0; i < NUM_SPIKE; i++)
 		{
@@ -132,7 +132,7 @@ void CoverSpike::push(int, Packet *p)
 		}
 	}	
 	
-	if ((rand() % 100) == 3) //change little spikes
+	if ((rand() % 60) == 3) //change little spikes
 	{
 		for (int i = 0; i < NUM_SPIKE; i++)
 		{
