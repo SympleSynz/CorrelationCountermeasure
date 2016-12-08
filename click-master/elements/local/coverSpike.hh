@@ -29,7 +29,7 @@ class CoverSpike : public Element
 
   		void push(int, Packet *);
   		int configure(Vector<String>&, ErrorHandler*);
-		void send_cover(Flow2 *, int, Packet *);
+		void send_cover(int, Packet *);
 
 };
 
