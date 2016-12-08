@@ -1,5 +1,5 @@
-#ifndef CLICK_COVERTRAFFIC_HH
-#define CLICK_COVERTRAFFIC_HH
+#ifndef CLICK_COVERSPIKE_HH
+#define CLICK_COVERSPIKE_HH
 #include <click/element.hh>
 CLICK_DECLS
 
