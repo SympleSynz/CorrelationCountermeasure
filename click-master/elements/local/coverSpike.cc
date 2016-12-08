@@ -43,7 +43,7 @@ int CoverSpike::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	_prob = new_prob;
 	
-	flowArray = (Flow2*)calloc(NUM_FLOWS, sizeof(Flow));
+	flowArray = (Flow2*)calloc(NUM_FLOWS, sizeof(Flow2));
 	
 	return 0;
 }
