@@ -16,8 +16,8 @@ class CoverSpike : public Element
   		int _prob;
 		Flow* flowArray;
 
-		int bigSpikes[3];
-		int littleSpikes[3];
+		int bigSpike[3];
+		int littleSpike[3];
 
 	public:
   		CoverSpike();

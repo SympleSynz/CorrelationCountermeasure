@@ -125,7 +125,7 @@ void CoverSpike::push(int, Packet *p)
 		}
 	}
 	
-	if (v1 < _prob))
+	if (v1 < _prob)
 	{
 		if (v1 % 2)
 		{
@@ -198,8 +198,6 @@ void CoverSpike::send_cover(Flow* targetFlow, int flowID, Packet* p)
 	
 	inet_aton(address, &(ip->ip_dst));
 	inet_aton(targetFlow->address, &(ip->ip_src) );
-	
-	targetFlow->flowTraffic += q->length();
 	
 	
 	ip->ip_sum = click_in_cksum((unsigned char *)ip, sizeof(click_ip));
