@@ -6,7 +6,7 @@ serverFD::FromDevice($SERVER_SIDE, SNIFFER false, PROMISC true );
 clientCor::Correlator(client);
 serverCor::Correlator(server);
 
-preCounter::CoverSpike(25);
+preCounter::CoverSpike(75);
 postCounter::checkCoverTraffic();
 
 clientQueue::Queue(100);
