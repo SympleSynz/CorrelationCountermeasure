@@ -3,6 +3,9 @@
 #include <click/element.hh>
 CLICK_DECLS
 
+#define NUM_FLOWS 51
+#define NUM_SPIKE 5
+
 typedef struct _flow2
 {
 	char address[16];
@@ -16,8 +19,9 @@ class CoverSpike : public Element
   		int _prob;
 		Flow2* flowArray;
 
-		int bigSpike[3];
-		int littleSpike[3];
+		int bigSpike[NUM_SPIKE];
+		int midSpike[NUM_SPIKE];
+		int littleSpike[NUM_SPIKE];
 
 	public:
   		CoverSpike();

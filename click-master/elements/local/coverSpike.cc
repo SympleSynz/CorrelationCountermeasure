@@ -17,8 +17,6 @@
 #include <stdlib.h>
 #include <arpa/inet.h>
 
-#define NUM_FLOWS 51
-
 CLICK_DECLS
 
 CoverSpike::CoverSpike(): _prob(0)
@@ -44,9 +42,10 @@ int CoverSpike::configure(Vector<String> &conf, ErrorHandler *errh)
 	_prob = new_prob;
 	
 	
-	for ( int i = 0; i < 3; i++)
+	for ( int i = 0; i < NUM_SPIKE; i++)
 	{
 		littleSpike[i] = 0;
+		midSpike[i] = 0;
 		bigSpike[i] = 0;
 	}
 	
@@ -102,6 +101,7 @@ int CoverSpike::configure(Vector<String> &conf, ErrorHandler *errh)
 void CoverSpike::push(int, Packet *p)
 {
 	int v1 = rand() % 100;
+	int v2 = rand() % NUM_SPIKE;
 	struct click_ip *ip_recv = (struct click_ip *) p->ip_header();
 	
 	int thisFlow = int((ip_recv->ip_dst.s_addr&0xFF000000)>>24);
@@ -116,17 +116,25 @@ void CoverSpike::push(int, Packet *p)
 		flowArray[thisFlow].active = 1;
 	}
 	
-	if ((rand() % 10000) == 1) //change big spikes
+	if ((rand() % 1000) == 1) //change big spikes
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < NUM_SPIKE; i++)
 		{
 			bigSpike[i] = (rand() % 49) + 1;
 		}
 	}
 	
-	if ((rand() % 1000) == 1) //change little spikes
+	if ((rand() % 500) == 2) //change mid spikes
 	{
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < NUM_SPIKE; i++)
+		{
+			midSpike[i] = (rand() % 49) + 1;
+		}
+	}	
+	
+	if ((rand() % 100) == 3) //change little spikes
+	{
+		for (int i = 0; i < NUM_SPIKE; i++)
 		{
 			littleSpike[i] = (rand() % 49) + 1;
 		}
@@ -134,22 +142,34 @@ void CoverSpike::push(int, Packet *p)
 	
 	if (v1 < _prob)
 	{
-		if (v1 % 2)
+		if (v2 == 1)
 		{
-			for (int i = 0; i < 3; i++)
+			if ( (v1 % 3) == 2 );
 			{
-				if (flowArray[bigSpike[i]].active)
+				for (int i = 0; i < NUM_SPIKE; i++)
 				{
-					send_cover( bigSpike[i], p );
+					if (flowArray[bigSpike[i]].active)
+					{
+						send_cover( bigSpike[i], p );
+					}
 				}
-			}
-		} else
-		{
-			for (int i = 0; i < 3; i++)
+			} else if ( (v1 % 3) == 1 )
 			{
-				if (flowArray[ littleSpike[i] ].active)
+				for (int i = 0; i < NUM_SPIKE; i++)
 				{
-					send_cover( littleSpike[i], p );
+					if (flowArray[ midSpike[i] ].active)
+					{
+						send_cover( midSpike[i], p );
+					}
+				}
+			} else
+			{
+				for (int i = 0; i < NUM_SPIKE; i++)
+				{
+					if (flowArray[ littleSpike[i] ].active)
+					{
+						send_cover( littleSpike[i], p );
+					}
 				}
 			}
 		}
