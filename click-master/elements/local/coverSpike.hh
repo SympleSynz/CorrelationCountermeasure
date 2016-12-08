@@ -4,7 +4,11 @@
 CLICK_DECLS
 
 #define NUM_FLOWS 51
+<<<<<<< HEAD
 #define NUM_SPIKE 8
+=======
+#define NUM_SPIKE 5
+>>>>>>> parent of 5217c61... trying to push correlation 213717,220929,225730,230404
 
 typedef struct _flow2
 {

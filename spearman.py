@@ -2,7 +2,6 @@ from __future__ import division
 import os
 import copy
 import csv
-import sys
 from operator import itemgetter
 
 def getFlowRate(dataFile):
@@ -76,7 +75,7 @@ def eval(correlation):
 		return "very-strong"
 
 def main():
-	folder = str(sys.argv[1])
+	folder = "20161207153702"
 	directory = "results/average/"+folder+"/"
 	with open("resultsCorrelation_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
