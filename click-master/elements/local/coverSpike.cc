@@ -144,7 +144,7 @@ void CoverSpike::push(int, Packet *p)
 	{
 		if (v2 == 1)
 		{
-			if ( (v1 % 3) == 2 );
+			if ( (v1 % 3) == 2 )
 			{
 				for (int i = 0; i < NUM_SPIKE; i++)
 				{
