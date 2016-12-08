@@ -2,7 +2,7 @@
  */
 
 #include <click/config.h>
-#include "CoverSpike.hh"
+#include "coverSpike.hh"
 #include <clicknet/ip.h>
 #include <clicknet/tcp.h>
 #include <clicknet/ether.h>
