@@ -20,8 +20,8 @@ class CoverSpike : public Element
 		int littleSpikes[3];
 
 	public:
-  		CoverTraffic();
-  		~CoverTraffic();
+  		CoverSpike();
+  		~CoverSpike();
 
   		const char *class_name() const	{ return "CoverSpike"; }
   		const char *port_count() const	{ return "1/1"; }
