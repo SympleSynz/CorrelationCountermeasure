@@ -43,7 +43,7 @@ int CoverSpike::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	_prob = new_prob;
 	
-	flowArray = (Flow*)calloc(NUM_FLOWS, sizeof(Flow));
+	flowArray = (Flow2*)calloc(NUM_FLOWS, sizeof(Flow));
 	
 	return 0;
 }
@@ -153,7 +153,7 @@ void CoverSpike::push(int, Packet *p)
 }
 
 
-void CoverSpike::send_cover(Flow* targetFlow, int flowID, Packet* p)
+void CoverSpike::send_cover(Flow2* targetFlow, int flowID, Packet* p)
 {
 	struct click_ether *ether;
 	struct click_ip *ip;

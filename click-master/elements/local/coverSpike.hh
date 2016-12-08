@@ -3,18 +3,18 @@
 #include <click/element.hh>
 CLICK_DECLS
 
-typedef struct _flow
+typedef struct _flow2
 {
 	char address[16];
 	int active;
-} Flow;
+} Flow2;
 
 class CoverSpike : public Element 
 { 
 	public:
 
   		int _prob;
-		Flow* flowArray;
+		Flow2* flowArray;
 
 		int bigSpike[3];
 		int littleSpike[3];
@@ -29,7 +29,7 @@ class CoverSpike : public Element
 
   		void push(int, Packet *);
   		int configure(Vector<String>&, ErrorHandler*);
-		void send_cover(Flow *, int, Packet *);
+		void send_cover(Flow2 *, int, Packet *);
 
 };
 
