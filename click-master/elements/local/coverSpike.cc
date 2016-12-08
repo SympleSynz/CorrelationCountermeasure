@@ -133,7 +133,7 @@ void CoverSpike::push(int, Packet *p)
 			{
 				if (flowArray[bigSpike[i]].active)
 				{
-					send_cover( &(flowArray[bigSpike[i]]), bigSpike[i], p );
+					send_cover( bigSpike[i], p );
 				}
 			}
 		} else
