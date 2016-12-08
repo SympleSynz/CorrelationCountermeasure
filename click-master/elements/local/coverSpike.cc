@@ -43,6 +43,13 @@ int CoverSpike::configure(Vector<String> &conf, ErrorHandler *errh)
 	}
 	_prob = new_prob;
 	
+	
+	for ( int i = 0; i < 3; i++)
+	{
+		littleSpike[i] = 0;
+		bigSpike[i] = 0;
+	}
+	
 	flowArray = (Flow2*)calloc(NUM_FLOWS, sizeof(Flow2));
 	
 	return 0;
@@ -140,7 +147,7 @@ void CoverSpike::push(int, Packet *p)
 		{
 			for (int i = 0; i < 3; i++)
 			{
-				if (flowArray[ littleSpike[i]].active)
+				if (flowArray[ littleSpike[i] ].active)
 				{
 					send_cover( littleSpike[i], p );
 				}
