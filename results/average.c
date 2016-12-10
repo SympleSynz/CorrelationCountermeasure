@@ -63,7 +63,7 @@ int main(int argc, char** argv)
 	
 	while (fileName[index + 1] != 'o')
 	{
-		printf("%c", fileName[index]);
+		//printf("%c", fileName[index]);
 		fprintf(allFlows, "%c", fileName[index++]);
 	}
 	fprintf(allFlows, ",");
@@ -75,7 +75,7 @@ int main(int argc, char** argv)
 	}
 	
 	fprintf(allFlows, "\n");
-	printf("Total Size: %ld\n", totalSize);
+	//printf("Total Size: %ld\n", totalSize);
 	
 	free(line);
 	free(averageArray);
