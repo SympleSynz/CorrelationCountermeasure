@@ -40,21 +40,21 @@ def main():
 		correlateData = []
 		totalCount = 0
 		correct = 0
-		for srcFilename in os.listdir(directory+"/server/"):
+		for srcFilename in os.listdir(directory+"server/"):
 			#src = "%s "%(srcFilename)
 			#results.write(src)
 			pearsonData = []
 			if srcFilename == "all.csv" or srcFilename.startswith("10.0"):
 				pass
 			else:
-				srcFlowData = getFlowRate((directory+"/server/"+srcFilename))
+				srcFlowData = getFlowRate((directory+"server/"+srcFilename))
 				totalCount += 1
 				writer.writerow((srcFilename," "))
-				for dstFilename in os.listdir(directory+"/client/"):
+				for dstFilename in os.listdir(directory+"client/"):
 					if dstFilename == "all.csv" or dstFilename.startswith("10.0"):
 						pass
 					else:
-						dstFlowData = getFlowRate((directory+"/client/"+dstFilename))
+						dstFlowData = getFlowRate((directory+"client/"+dstFilename))
 						pearsonData.append((Pearson(srcFlowData, dstFlowData),dstFilename))
 				for dst in pearsonData:
 					#dstResults = "%s %f %s " %(dst[1],dst[0],eval(dst[0]))

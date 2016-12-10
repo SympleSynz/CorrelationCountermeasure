@@ -42,27 +42,8 @@ def Spearman(srcFlowData,dstFlowData):
 #Rank Independent Variable
 	dstRank = Rank(dstFlowData)
 	#print("destRank",dstRank)
-#Difference in Rank
-	difference = []
-	for i in range(len(srcRank)):
-		difference.append(srcRank[i] - dstRank[i])
-	#print("Rank diff",difference)
-#Square Difference
-	for i in range(len(difference)):
-		difference[i] = difference[i]**2
-	#print("Square diff",difference)
-#Calculate correlation
-	sumSquareDiff = sum(difference)
-	nSize = len(dstFlowData)
-	# print("Sum of square difference",sumSquareDiff)
-	# print("size",nSize)
-	# print("6*diff",(6*sumSquareDiff))
-	# print("size**2 - 1", (nSize**2 - 1))
-	# dividend = nSize*(nSize**2 - 1)
-	# print("size * above", dividend)
-	# print("now divide", (6*sumSquareDiff)/dividend)
-	correlation = 1 - ((6*sumSquareDiff/(nSize*(nSize**2-1))))
-	return correlation
+	correlation = numpy.corrcoef(srcRank,dstRank)
+	return correlation[0][1]
 
 def eval(correlation):
 	if abs(correlation) > 0.00 and abs(correlation) <= 0.19:
@@ -79,7 +60,7 @@ def eval(correlation):
 def main():
 	folder = str(sys.argv[1])
 	directory = "results/average/"+folder+"/"
-	with open("resultsCorrelation_"+folder+".csv","wb") as results:
+	with open("resultsCorrelation2_"+folder+".csv","wb") as results:
 	#results = open("resultsCorrelationBaseline.csv","wb")
 		writer = csv.writer(results)
 		correlateData = []
